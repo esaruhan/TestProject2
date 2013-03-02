@@ -96,17 +96,7 @@ public class GorusmeleriDuzenle {
                       operatorler.getSabithat().get(numara).add(telpojo);
                 }
                 
-            } else if ( operator.equalsIgnoreCase("Diğer Operatör")){
-                
-                if(operatorler.getDiger().containsKey(numara)){
-                    
-                     operatorler.getDiger().get(numara).add(telpojo);
-                } else{
-                      operatorler.getDiger().put(numara,new ArrayList<TelefonPojo>() ); 
-                      operatorler.getDiger().get(numara).add(telpojo);
-                }
-                
-            } else if (type.equalsIgnoreCase("İnternet Kullanımı")&numara.equalsIgnoreCase("Internet")){
+            }  else if (type.equalsIgnoreCase("İnternet Kullanımı")&numara.equalsIgnoreCase("Internet")){
                 telpojo.setOperator("Internet");
                 telpojo.setType("Internet");
                
@@ -118,6 +108,16 @@ public class GorusmeleriDuzenle {
                       operatorler.getInternet().put(numara,new ArrayList<TelefonPojo>() ); 
                       operatorler.getInternet().get(numara).add(telpojo);
                 }
+            } else {
+                
+                if(operatorler.getDiger().containsKey(numara)){
+                    
+                     operatorler.getDiger().get(numara).add(telpojo);
+                } else{
+                      operatorler.getDiger().put(numara,new ArrayList<TelefonPojo>() ); 
+                      operatorler.getDiger().get(numara).add(telpojo);
+                }
+                
             }
             
         }

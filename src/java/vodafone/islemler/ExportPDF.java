@@ -36,6 +36,9 @@ public class ExportPDF {
         public void setTarihAraligi(String tarih1, String tarih2){
 		tarih_araligi = tarih1.split(" ")[0]+" - "+tarih2.split(" ")[0];
 	}
+        public String getTarihAraligi(){
+            return tarih_araligi;
+        }
         public void setAboneNumara(String no){
             
             this.abone_numara = no ;
