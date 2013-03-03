@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -77,8 +78,8 @@ public class RaporServlet extends HttpServlet {
 //                boolean isInMemory = item.isInMemory();         
 //                long sizeInBytes = item.getSize();
 //            }
-        
-            File uploadedFile = new File("C:\\VodafoneRaporlar\\test.xls");
+            Random rnd = new Random();
+            File uploadedFile = new File("C:\\VodafoneRaporlar\\test"+rnd.nextInt(100)+".xls");
             item.write(uploadedFile);
             NewClass myclass    = new NewClass(uploadedFile.getAbsolutePath());      
                outputPath = myclass.outputPath();
@@ -88,7 +89,7 @@ public class RaporServlet extends HttpServlet {
 		File pdfFile = new File(outputPath);
 
 		response.setContentType("application/pdf");
-		response.addHeader("Content-Disposition", "attachment; filename=" + "5368799737##15-02-2013##-##16-01-2013.pdf");
+		response.addHeader("Content-Disposition", "attachment; filename=" + pdfFile.getName());
 		response.setContentLength((int) pdfFile.length());
 
 		FileInputStream fileInputStream = new FileInputStream(pdfFile);

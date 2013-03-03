@@ -27,15 +27,20 @@ public class DatabaseInsert {
 		
 	}
         
-        
-        
         public void kaydetDatabase(){
 		
 		Iterator<String> it1 = databasePojolar.keySet().iterator();
-		
+		 PreparedStatement ps ;
 		boolean sonuc = createTable();
+                
 		if(sonuc){
-			
+                    try{
+			String sql1 = "TRUNCATE TABLE gorusme";
+                        ps = (PreparedStatement)connection.prepareStatement(sql1);
+                        ps.executeUpdate();
+                    } catch(Exception ex){
+                        ex.printStackTrace();
+                    }      
 			while(it1.hasNext()){
 				
 				String numara = it1.next();
@@ -56,7 +61,7 @@ public class DatabaseInsert {
 					String sql = "INSERT INTO gorusme (numara,operator,mesajSayisi,aramaSayisi,toplamDakika,toplamAramaUcret,toplamMesajUcret,ortalamaGorusme) VALUES (?,?,?,?,?,?,?,?)";	
 				try{	
 											//	SELECT numara, toplamDakika, aramaSayisi from gorusme ORDER BY toplamDakika;
-					PreparedStatement ps = (PreparedStatement) connection.prepareStatement(sql);
+                                        ps = (PreparedStatement) connection.prepareStatement(sql);
 					
 					ps.setString(1, numara);
 					ps.setString(2,operator);
@@ -120,7 +125,9 @@ public class DatabaseInsert {
 			
 		}catch(Exception ex){
 			ex.printStackTrace();
-			sonuc = false;
+                        if(ex.toString().contains(" object name already exists:"))
+                            sonuc = true;
+                        else sonuc = false;
 		}
 		return sonuc;
 	}
