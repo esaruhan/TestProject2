@@ -19,17 +19,16 @@ public class LogFile {
     
     public static void insertLog(String message, Level log_level){
         try {
-            LogManager lm = LogManager.getLogManager();
-            String path = System.getProperty("user.dir")+"/log_process.txt";
-            FileHandler fh = new FileHandler(path);
+             LogManager lm = LogManager.getLogManager();
+             String path = System.getProperty("user.dir")+"/log_process.txt";
+             FileHandler fh = new FileHandler(path);
              Logger logger = Logger.getLogger("LogginVodafone");
-            lm.addLogger(logger);
+             lm.addLogger(logger);
              logger.setLevel(log_level);
              fh.setFormatter(new XMLFormatter());
-              logger.addHandler(fh);
-               logger.log(log_level, message);
-
-                fh.close();
+             logger.addHandler(fh);
+             logger.log(log_level, message);
+             fh.close();
         } catch (IOException ex) {
             Logger.getLogger(LogFile.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {

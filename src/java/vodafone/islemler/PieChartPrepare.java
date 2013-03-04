@@ -6,20 +6,23 @@ package vodafone.islemler;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Image;
+import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.PieToolTipGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 import org.jfree.util.Rotation;
-
 import vodafone.pojolar.Operator;
 import vodafone.pojolar.OperatoreGorePojo;
 import vodafone.pojolar.TelefonPojo;
@@ -116,24 +119,8 @@ public class PieChartPrepare {
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
-		Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
-		
-		JFreeChart chart = 
-			ChartFactory.createPieChart3D(null,dataset,true,true,false);
-		
-		PiePlot3D plot = (PiePlot3D) chart.getPlot();
-		plot.setCircular(true);
-		plot.setStartAngle(250);
-		plot.setDirection(Rotation.CLOCKWISE);
-		plot.setForegroundAlpha(1.0f);
-		plot.setNoDataMessage("No data to display");
-		plot.setLabelFont(new Font("Arial", Font.PLAIN, 8));
-		
-		PieRenderer renderer = new PieRenderer(colors);
-		
-		renderer.setColor(plot, dataset);
-		
-		Image mesaj_sayisi =  chart.createBufferedImage(250,180);
+	
+		Image mesaj_sayisi =  createPIEChart(dataset,new CustomLabelGenerator());
 		
 		return mesaj_sayisi;
 	}
@@ -158,29 +145,12 @@ public class PieChartPrepare {
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
 		
-		Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
-		
-		JFreeChart chart = 
-			ChartFactory.createPieChart3D(null,dataset,true,true,false);
-		
-		PiePlot3D plot = (PiePlot3D) chart.getPlot();
-		plot.setCircular(true);
-		plot.setStartAngle(250);
-		plot.setDirection(Rotation.CLOCKWISE);
-		plot.setForegroundAlpha(1.0f);
-		plot.setNoDataMessage("No data to display");
-		plot.setLabelFont(new Font("Arial", Font.PLAIN, 8));
-		
-		PieRenderer renderer = new PieRenderer(colors);
-		
-		renderer.setColor(plot, dataset);
-		
-		mesaj_ucret =  chart.createBufferedImage(250,180);
-		
-		
+		mesaj_ucret = createPIEChart(dataset,null);
 		
 		return mesaj_ucret ;
 	}
+        
+ 
 	public Image createPieChart_Arama_UcreteGore(){
 		
 		Double calculate_total_aranan = (double)(turkcel.getArama_ucret() + avea.getArama_ucret() + vodafone.getArama_ucret() + sabithat.getArama_ucret() + diger.getArama_ucret());
@@ -199,25 +169,9 @@ public class PieChartPrepare {
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
+	
 		
-
-		Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
-		
-		JFreeChart chart = 
-			ChartFactory.createPieChart3D(null,dataset,true,true,false);
-		
-		PiePlot3D plot = (PiePlot3D) chart.getPlot();
-		plot.setCircular(true);
-		plot.setStartAngle(250);
-		plot.setDirection(Rotation.CLOCKWISE);
-		plot.setForegroundAlpha(1.0f);
-		plot.setNoDataMessage("No data to display");
-		plot.setLabelFont(new Font("Arial", Font.PLAIN, 8));
-		
-		 PieRenderer renderer = new PieRenderer(colors);
-		renderer.setColor(plot, dataset);
-		
-		Image arama_ucret =  chart.createBufferedImage(250,180);
+		Image arama_ucret = createPIEChart(dataset,null);
 		
 		return arama_ucret;
 		
@@ -241,23 +195,7 @@ public class PieChartPrepare {
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
 
-		Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
-		
-		JFreeChart chart = 
-			ChartFactory.createPieChart3D(null,dataset,true,true,false);
-		
-		PiePlot3D plot = (PiePlot3D) chart.getPlot();
-		plot.setCircular(true);
-		plot.setStartAngle(250);
-		plot.setDirection(Rotation.CLOCKWISE);
-		plot.setForegroundAlpha(1.0f);
-		plot.setNoDataMessage("No data to display");
-		plot.setLabelFont(new Font("Arial", Font.PLAIN, 8));
-		
-		 PieRenderer renderer = new PieRenderer(colors);
-		renderer.setColor(plot, dataset);
-		
-		Image numara_sayisina_gore =  chart.createBufferedImage(250,180);
+		Image numara_sayisina_gore =  createPIEChart(dataset,null);
 		
 		return numara_sayisina_gore;
 	}
@@ -278,31 +216,75 @@ public class PieChartPrepare {
 		dataset.setValue(vodafone.getOperator(), new Double(vodafone_per));
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
+		
+		Image sure_bazli_img  =  createPIEChart(dataset,null);
 
+		return sure_bazli_img;
 		
-		Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
+	}
+         public Image createPIEChart2(DefaultPieDataset dataset){
+                Image image = null ;
+                Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
 		
-		JFreeChart chart = 
-			ChartFactory.createPieChart3D(null,dataset,true,true,false);
+		JFreeChart chart = ChartFactory.createPieChart3D(null,dataset,true,true,false);
 		
-		PiePlot3D plot = (PiePlot3D) chart.getPlot();
+		PiePlot plot =((PiePlot) chart.getPlot());
+                plot.setForegroundAlpha(1.0f);
+		plot.setCircular(true);
+		plot.setStartAngle(250);
+		plot.setDirection(Rotation.CLOCKWISE);
+                     float h = 250;
+                     float w = 180;
+                    GradientPaint gradientPaint = new GradientPaint(0.0F, 10.0F, Color.white, 0, h, Color.YELLOW);
+                    plot.setBackgroundPaint(gradientPaint);
+		plot.setNoDataMessage("Değerler olmadığından grafik çizilmemiştir");
+		plot.setLabelFont(new Font("Arial", Font.PLAIN, 7));
+//		
+                plot.setInteriorGap(0.1);
+                PieRenderer renderer = new PieRenderer(colors);
+                renderer.setColor(plot, dataset);
+                  plot.setLabelGenerator(new CustomLabelGenerator());
+		
+		
+		
+		
+		image =  chart.createBufferedImage(250,180);
+		
+            return image;
+        }
+        public Image createPIEChart(DefaultPieDataset dataset,PieSectionLabelGenerator genarator){
+                Image image = null ;
+                Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
+		
+		JFreeChart chart = ChartFactory.createPieChart3D(null,dataset,true,false,false);
+                
+		GradientPaint gradientPaint = new GradientPaint(0.0F, 6.0F, Color.white, 0, 180, Color.cyan);		
+                PiePlot3D plot = (PiePlot3D) chart.getPlot();
+                plot.setBackgroundPaint(gradientPaint);
 		plot.setCircular(true);
 		plot.setStartAngle(250);
 		plot.setDirection(Rotation.CLOCKWISE);
 		plot.setForegroundAlpha(1.0f);
-		plot.setNoDataMessage("No data to display");
-		plot.setLabelFont(new Font("Arial", Font.PLAIN, 8));
+		plot.setNoDataMessage("Değerler olmadığından grafik çizilmemiştir");
+                if(genarator!=null)
+                {    plot.setLabelFont(new Font("Arial", Font.PLAIN, 8));
+
+                }
+              //  plot.setToolTipGenerator(new StandardPieToolTipGenerator());
+                plot.setToolTipGenerator(null);
+                plot.setInteriorGap(0.01);
+                PieRenderer renderer = new PieRenderer(colors);
+                renderer.setColor(plot, dataset);
+		plot.setLabelGenerator(genarator);
 		
-		 PieRenderer renderer = new PieRenderer(colors);
-		renderer.setColor(plot, dataset);
-		
-		Image sure_bazli_img =  chart.createBufferedImage(250,180);
 		
 		
+		image =  chart.createBufferedImage(250,180);
 		
-		return sure_bazli_img;
-		
-	}
+            return image;
+        }
+
+        
         public void calculateTotals(Operator op ){
 	
 		 aramaSayisi 		+= op.getArama_sayisi();
@@ -403,6 +385,7 @@ public class PieChartPrepare {
          {
              aInt = i % this.color.length;
              plot.setSectionPaint(keys.get(i), this.color[aInt]);
+            
          }
      }
  }
@@ -466,4 +449,37 @@ public class PieChartPrepare {
 		
 		return operator ;
 	}
+        
+     static class CustomLabelGenerator implements PieSectionLabelGenerator {
+        
+        /**
+         * Generates a label for a pie section.
+         * 
+         * @param dataset  the dataset (<code>null</code> not permitted).
+         * @param key  the section key (<code>null</code> not permitted).
+         * 
+         * @return the label (possibly <code>null</code>).
+         */
+        public String generateSectionLabel(final PieDataset dataset, final Comparable key) {
+            String result = null;    
+            if (dataset != null) {
+                if (!key.equals("Vodafone")) {
+                    result = key.toString();   
+                }
+            }
+            return result;
+        }
+
+        @Override
+        public AttributedString generateAttributedSectionLabel(PieDataset dataset, Comparable key) {
+            AttributedString result = null;    
+            if (dataset != null) {
+                if (!key.equals("Vodafone")) {
+                    result = new AttributedString(key.toString());  
+                }
+            }
+            return result;
+        }
+   
+    }
 }
