@@ -119,8 +119,8 @@ public class PieChartPrepare {
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
-	
-		Image mesaj_sayisi =  createPIEChart(dataset,new CustomLabelGenerator());
+                String message = "Hiç Mesaj Atmamışsınız. \n Bu yüzden grafik oluşturulmamıştır";
+		Image mesaj_sayisi =  createPIEChart(dataset,null,message);
 		
 		return mesaj_sayisi;
 	}
@@ -144,8 +144,8 @@ public class PieChartPrepare {
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
-		
-		mesaj_ucret = createPIEChart(dataset,null);
+		String message = "Hiç Mesaja Ücret ödememişsiniz. \n Ya mesaj hakkınız var, Ya da mesaj atmadınız.\n Bu yüzden grafik oluşturulmamıştır";
+		mesaj_ucret = createPIEChart(dataset,null,message);
 		
 		return mesaj_ucret ;
 	}
@@ -170,8 +170,8 @@ public class PieChartPrepare {
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
 	
-		
-		Image arama_ucret = createPIEChart(dataset,null);
+		String message = "Hiç aramaya ücret ödememişsiniz. \n Muhtemelen paketinizdeki dakikalarınızı aşmadınız.\n Bu yüzden grafik oluşturulmamıştır.";
+		Image arama_ucret = createPIEChart(dataset,null,message);
 		
 		return arama_ucret;
 		
@@ -194,8 +194,8 @@ public class PieChartPrepare {
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
-
-		Image numara_sayisina_gore =  createPIEChart(dataset,null);
+                String message = ""+"\nBu yüzden grafik oluşturulmamıştır";
+		Image numara_sayisina_gore =  createPIEChart(dataset,null,message);
 		
 		return numara_sayisina_gore;
 	}
@@ -216,8 +216,8 @@ public class PieChartPrepare {
 		dataset.setValue(vodafone.getOperator(), new Double(vodafone_per));
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
-		
-		Image sure_bazli_img  =  createPIEChart(dataset,null);
+		String message = "Hiç arama yapmamışınız."+"\nBu yüzden grafik oluşturulmamıştır";
+		Image sure_bazli_img  =  createPIEChart(dataset,null,message);
 
 		return sure_bazli_img;
 		
@@ -244,7 +244,7 @@ public class PieChartPrepare {
                 PieRenderer renderer = new PieRenderer(colors);
                 renderer.setColor(plot, dataset);
                   plot.setLabelGenerator(new CustomLabelGenerator());
-		
+		plot.setNoDataMessageFont(new Font("Arial", Font.PLAIN, 12));
 		
 		
 		
@@ -252,20 +252,22 @@ public class PieChartPrepare {
 		
             return image;
         }
-        public Image createPIEChart(DefaultPieDataset dataset,PieSectionLabelGenerator genarator){
+        public Image createPIEChart(DefaultPieDataset dataset,PieSectionLabelGenerator genarator,String message){
                 Image image = null ;
                 Color[] colors = {Color.blue, Color.white, Color.red,Color.cyan,Color.green};
 		
 		JFreeChart chart = ChartFactory.createPieChart3D(null,dataset,true,false,false);
                 
-		GradientPaint gradientPaint = new GradientPaint(0.0F, 6.0F, Color.white, 0, 180, Color.cyan);		
+		GradientPaint gradientPaint = new GradientPaint(0.0F, 6.0F, Color.white, 0, 180, new Color(204,255,230));		
                 PiePlot3D plot = (PiePlot3D) chart.getPlot();
                 plot.setBackgroundPaint(gradientPaint);
 		plot.setCircular(true);
-		plot.setStartAngle(250);
+		plot.setStartAngle(290);
 		plot.setDirection(Rotation.CLOCKWISE);
-		plot.setForegroundAlpha(1.0f);
-		plot.setNoDataMessage("Değerler olmadığından grafik çizilmemiştir");
+		plot.setForegroundAlpha(0.7f);
+		plot.setNoDataMessage(message);
+                plot.setNoDataMessageFont(new Font("Arial", Font.PLAIN, 10));
+                plot.setNoDataMessagePaint(Color.RED);
                 if(genarator!=null)
                 {    plot.setLabelFont(new Font("Arial", Font.PLAIN, 8));
 
@@ -273,6 +275,7 @@ public class PieChartPrepare {
               //  plot.setToolTipGenerator(new StandardPieToolTipGenerator());
                 plot.setToolTipGenerator(null);
                 plot.setInteriorGap(0.01);
+                
                 PieRenderer renderer = new PieRenderer(colors);
                 renderer.setColor(plot, dataset);
 		plot.setLabelGenerator(genarator);
