@@ -12,6 +12,11 @@
     <title>JSP Page</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <form action="RaporServlet" method="post" enctype="multipart/form-data">
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file"><br>
+    <input type="submit" name="submit" value="Submit">
+    </form>
+    
 </body>
 </html>

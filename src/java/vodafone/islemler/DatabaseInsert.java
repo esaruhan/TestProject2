@@ -30,7 +30,7 @@ public class DatabaseInsert {
         public void kaydetDatabase(){
 		
 		Iterator<String> it1 = databasePojolar.keySet().iterator();
-		 PreparedStatement ps ;
+		PreparedStatement ps = null ;
 		boolean sonuc = createTable();
                 
 		if(sonuc){
@@ -78,10 +78,15 @@ public class DatabaseInsert {
 					ps.setDouble(7, toplam_mesaj_ucret);
 					ps.setDouble(8, ortalama_gorusme);
 					ps.executeUpdate();
-					
+                                        
+					if(ps!=null)
+                                             ps.close();
 				}catch(Exception ex){
+                                    
 					ex.printStackTrace();
-				}
+				} finally{
+                                    
+                                }
 			}
 		}
 	}
@@ -122,13 +127,15 @@ public class DatabaseInsert {
 			ps.executeUpdate(sql);
 			sonuc = true;
 			
-			
+			if(ps!=null)
+                            ps.close();
+                        
 		}catch(Exception ex){
 			ex.printStackTrace();
                         if(ex.toString().contains(" object name already exists:"))
                             sonuc = true;
                         else sonuc = false;
-		}
+		} 
 		return sonuc;
 	}
 

@@ -8,9 +8,12 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,16 +61,16 @@ public class DosyadanOkuma {
                 gorusmeler.add(data);
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {    
+             LogFile.insertLog("DosyadanOkuma.dosyaOkuFromString"+"  -->Exception ==>"+ex.toString(), Level.WARNING);
         }
 
         return gorusmeler;
          
      }
     public  ArrayList<ArrayList<String>> dosyaOkuFromFile(String fileName) {
+        try {        
         
-        try {
             
             File        file    = new File(fileName);                             
             Document 	doc     = Jsoup.parse(file,"iso-8859-9");      
@@ -92,13 +95,14 @@ public class DosyadanOkuma {
                 }
 //                System.out.println("----------FİNİSH-----------");
                 gorusmeler.add(data);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
+            }   
         return gorusmeler;
+        } catch (IOException ex) {
+            Logger.getLogger(DosyadanOkuma.class.getName()).log(Level.SEVERE, null, ex);
+            LogFile.insertLog("DosyadanOkuma.dosyaOkuFromFile"+"  -->Exception ==>"+ex.toString(), Level.WARNING);      
+            return null;
+        }
+       
     }
 
     public  String getAboneNumara() {

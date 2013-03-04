@@ -7,17 +7,15 @@ package vodafone.servlets;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import vodafone.main.NewClass;
@@ -41,14 +39,15 @@ public class RaporServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            {
+           throws ServletException, IOException   {
         response.setContentType("application/pdf;charset=UTF-8");
        
         response.setCharacterEncoding("UTF8");
        
-      PrintWriter out = null ;
+      
         try {
-            out = response.getWriter();
+            
+            ServletOutputStream sos = response.getOutputStream();
             /* TODO output your page here. You may use following sample code. */
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             // Create a factory for disk-based file items
@@ -81,30 +80,31 @@ public class RaporServlet extends HttpServlet {
             Random rnd = new Random();
             File uploadedFile = new File("C:\\VodafoneRaporlar\\test"+rnd.nextInt(100)+".xls");
             item.write(uploadedFile);
-            NewClass myclass    = new NewClass(uploadedFile.getAbsolutePath());      
+            String contextPath = getServletContext().getRealPath(File.separator);
+            NewClass myclass    = new NewClass(uploadedFile.getAbsolutePath(),contextPath);      
                outputPath = myclass.outputPath();
                
-                String pdfFileName = "pdf-test.pdf";
+               
 		
 		File pdfFile = new File(outputPath);
 
 		response.setContentType("application/pdf");
-		response.addHeader("Content-Disposition", "attachment; filename=" + pdfFile.getName());
-		response.setContentLength((int) pdfFile.length());
-
+		response.addHeader("Content-Disposition", "inline; filename=\"" + ""+pdfFile.getName()+"\"");
+                int length = (int)pdfFile.length();
+                response.setContentLength((int) pdfFile.length());
 		FileInputStream fileInputStream = new FileInputStream(pdfFile);
-		OutputStream responseOutputStream = response.getOutputStream();
+		
 		int bytes;
 		while ((bytes = fileInputStream.read()) != -1) {
-			responseOutputStream.write(bytes);
-		}
-               
+			sos.write(bytes);
+		}         
+                sos.flush();
                 fileInputStream.close();
-                responseOutputStream.close();
+                sos.close();
         } catch(Exception ex) {
-            out.println("Sorun oluştu" +ex.toString());
+            
         }finally {            
-            out.close();
+           
             
         }
     }
