@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MySqlReport3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3d3de737-535d-41e1-8930-42562c3b29d9">
+	<property name="ireport.zoom" value="1.0000000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="faturaTarih" class="java.lang.String"/>
+	<parameter name="Ad" class="java.lang.String"/>
+	<parameter name="TelefonNo" class="java.lang.String"/>
+	<parameter name="mesaj_sayisi" class="java.awt.Image"/>
+	<parameter name="arama_sure" class="java.awt.Image"/>
+	<parameter name="numara_sayisi" class="java.awt.Image"/>
+	<parameter name="mesaj_ucret" class="java.awt.Image"/>
+	<parameter name="arama_ucret" class="java.awt.Image"/>
+	<parameter name="leaf" class="java.awt.Image"/>
+	<parameter name="total_number" class="java.lang.Number"/>
+	<parameter name="arama_icon" class="java.awt.Image"/>
+	<parameter name="mesaj_icon" class="java.awt.Image"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT numara, operator, mesajSayisi, aramaSayisi, toplamDakika, toplamAramaUcret, toplamMesajUcret, ortalamaGorusme FROM gorusme ORDER BY aramaSayisi DESC;]]>
+	</queryString>
+	<field name="numara" class="java.lang.String"/>
+	<field name="operator" class="java.lang.String"/>
+	<field name="mesajSayisi" class="java.lang.Long"/>
+	<field name="aramaSayisi" class="java.lang.Long"/>
+	<field name="toplamDakika" class="java.lang.Long"/>
+	<field name="toplamAramaUcret" class="java.lang.Double"/>
+	<field name="toplamMesajUcret" class="java.lang.Double"/>
+	<field name="ortalamaGorusme" class="java.lang.Double"/>
+	<variable name="TotalSMS" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{mesajSayisi}]]></variableExpression>
+	</variable>
+	<variable name="TotalARAMA" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{aramaSayisi}]]></variableExpression>
+	</variable>
+	<variable name="TotalSURE" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[($F{operator}.equalsIgnoreCase( 'INTERNET' )) ? 0 : $F{toplamDakika}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSMSUcret" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{toplamMesajUcret}]]></variableExpression>
+	</variable>
+	<variable name="TotalARAMAUcret" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{toplamAramaUcret}]]></variableExpression>
+	</variable>
+	<variable name="dakika" class="java.lang.Double" resetType="None">
+		<variableExpression><![CDATA[($F{toplamDakika}.doubleValue() != 0.0)?(new Double($F{toplamDakika}.doubleValue()/60)):$F{toplamDakika}]]></variableExpression>
+	</variable>
+	<variable name="toplamDakika" class="java.lang.Integer">
+		<variableExpression><![CDATA[($V{TotalSURE}.doubleValue() != 0.0)?(new Double($V{TotalSURE}.doubleValue()/60)):$V{toplamDakika}]]></variableExpression>
+	</variable>
+	<variable name="toplamSaniye" class="java.lang.Integer">
+		<variableExpression><![CDATA[($V{TotalSURE}.doubleValue() != 0.0)?(new Double($V{TotalSURE}.doubleValue()%60)):$V{toplamSaniye}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<image>
+				<reportElement uuid="855371bd-582e-40a7-b9dc-be8c4fdad16f" x="275" y="0" width="300" height="64"/>
+				<imageExpression><![CDATA[$P{leaf}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="0576714c-d9f3-4a85-a340-d155cbfb2439" style="Title" x="0" y="13" width="263" height="33" forecolor="#006633"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfEncoding="Cp1254"/>
+				</textElement>
+				<text><![CDATA[Vodafone Görüşme]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="14f8a455-2d6a-4a14-893b-22ca75b5d48a" style="SubTitle" x="100" y="46" width="174" height="22" forecolor="#CCFFCC"/>
+				<textElement>
+					<font pdfEncoding="Cp1254"/>
+				</textElement>
+				<text><![CDATA[by Ertuğrul Saruhan]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="60" splitType="Stretch">
+			<line>
+				<reportElement uuid="11e66bf4-1593-4938-b0eb-d35bde65b6c4" positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="2ebf90c2-daec-4416-89c9-a2053cbb576d" style="Column header" x="0" y="40" width="69" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[Numara]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1e43ddea-04e3-4532-9d98-a4b05f0b879c" style="Column header" x="111" y="40" width="69" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[Operator]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a368658a-deab-4df6-b05b-52f9a5b1e231" style="Column header" x="197" y="41" width="44" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[SMS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3dbd316a-a9a5-42d0-9f27-ad34306db9e1" style="Column header" x="263" y="41" width="42" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[Arama.S]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6aee0978-fc7d-4448-b032-b317fdd2780e" style="Column header" x="350" y="41" width="55" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[T.Süredk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ec2f1a77-4783-4748-abe4-7ba52ee772d1" style="Column header" x="422" y="41" width="64" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[Arama Uc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4083b0e6-576a-40b1-84f2-a46c38a75369" style="Column header" x="502" y="42" width="50" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[SMS Uc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4252a8e9-4844-496b-84b8-a592bef4662f" x="1" y="15" width="142" height="20" forecolor="#FF0033"/>
+				<textElement>
+					<font size="12" isBold="true" pdfEncoding="Cp1254"/>
+				</textElement>
+				<text><![CDATA[Fatura Tarih Aralığı:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ee049c22-21f0-488e-a5fd-23de521a742e" x="196" y="16" width="162" height="16" forecolor="#FF3333"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{faturaTarih}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement uuid="ab96bb33-6ff1-440a-b348-3b5c5f67ff10" positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="2a64778f-b7b3-4a18-bef9-bfb77e5f9537" style="Detail" x="0" y="0" width="89" height="15" forecolor="#006600"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{numara}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="66f94ca9-9843-4d39-b329-02f81b1ef58c" style="Detail" x="100" y="2" width="80" height="15" forecolor="#3333FF"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{operator}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="78f3e769-d04f-4f85-b457-b5b1b554be52" x="197" y="2" width="35" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{mesajSayisi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="05baab28-54ee-4dfd-a876-dd46593002a9" style="Detail" x="263" y="3" width="29" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{aramaSayisi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="072cd699-b589-4581-b476-acf40c6dcccb" style="Detail" x="502" y="1" width="34" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{toplamMesajUcret}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="dd564c1b-0bbf-4579-b42d-0190fa051820" style="Detail" x="433" y="2" width="30" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{toplamAramaUcret}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0b6fd435-20e8-43b1-a254-767849d7cf37" x="400" y="2" width="17" height="14" forecolor="#FF0033"/>
+				<textElement/>
+				<text><![CDATA[dk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b7936f35-ff79-4606-a679-d06d221cf9f8" x="465" y="3" width="16" height="13" forecolor="#006600"/>
+				<textElement/>
+				<text><![CDATA[TL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="81b86ed8-7113-4d6a-867c-c8709656363e" x="533" y="3" width="16" height="13" forecolor="#006600"/>
+				<textElement/>
+				<text><![CDATA[TL]]></text>
+			</staticText>
+			<textField pattern="###0.00">
+				<reportElement uuid="f5330aa2-77c7-4cfe-a52d-ed6ef9078d7a" x="360" y="1" width="38" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{dakika}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="c702138b-9960-4041-a2a5-f2d5e3b1dd77" mode="Transparent" x="292" y="3" width="13" height="13" forecolor="#FFFFFF"/>
+				<imageExpression><![CDATA[$P{arama_icon}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="43e68ab1-bb7f-4da0-b91c-b2f08ace9b56" mode="Transparent" x="180" y="2" width="13" height="13" forecolor="#FFFFCC" backcolor="#FFFF66"/>
+				<imageExpression><![CDATA[$P{mesaj_icon}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="40" splitType="Stretch">
+			<line>
+				<reportElement uuid="a95d5a74-cb72-4200-a954-76f317189c0c" positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="833d8128-2cd7-4d57-a22d-91b4cc7bbd68" style="Column header" x="433" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="045eb1c8-e7b3-4cd3-9fbc-0f20ccb58a70" style="Column header" x="513" y="0" width="40" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="0e20efa2-d0b5-48dd-a736-f89136932e38" style="Column header" x="0" y="0" width="197" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a275e7db-2011-4f3a-81a7-3d0d0463a05d" x="0" y="11" width="100" height="36" forecolor="#0033FF"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Toplam:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d6227d68-1098-4a11-8ff7-31a241afad55" x="197" y="18" width="51" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalSMS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ef0a5c02-5ee7-4863-9cb0-7ec073af9787" x="263" y="18" width="55" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalARAMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="31e4bf6f-c795-48fb-8de6-38f7258c9236" x="439" y="18" width="42" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalARAMAUcret}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="204fd66b-3f3f-4da4-9c64-7aefe48d5782" x="502" y="18" width="42" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalSMSUcret}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="58a3c5b5-dc47-4f0b-911f-7e51cb7bf43d" x="0" y="65" width="370" height="35" forecolor="#3366FF"/>
+				<textElement>
+					<font size="20" pdfEncoding="Cp1254"/>
+				</textElement>
+				<text><![CDATA[Toplam Iletisim Kurdugunuz Kisi Sayisi :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="49be12bd-3d37-4eab-80e7-a120083742b1" x="333" y="18" width="37" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{toplamDakika}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b022b5f-82ed-4761-aae5-62491f640444" x="368" y="21" width="18" height="15"/>
+				<textElement/>
+				<text><![CDATA[dk]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ccf4dc41-227f-47f6-ad8d-d6d7b1b1d240" x="385" y="18" width="20" height="19"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{toplamSaniye}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="16d7e722-6a1d-4776-8d33-06c3112bb8d5" x="405" y="22" width="14" height="13"/>
+				<textElement/>
+				<text><![CDATA[sn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90b169e6-aa20-43b7-b7e2-acfbc7ddd5a3" x="305" y="21" width="19" height="13"/>
+				<textElement/>
+				<text><![CDATA[kez]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dda1d828-5867-4feb-a15e-157fea7872ee" x="232" y="21" width="32" height="13"/>
+				<textElement/>
+				<text><![CDATA[Tane]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7767ddd0-8653-498f-bd80-d866369ffa08" x="473" y="22" width="16" height="13"/>
+				<textElement/>
+				<text><![CDATA[TL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a47dd3c4-96a9-42f5-b24f-ff95b6c171b7" x="536" y="22" width="16" height="13"/>
+				<textElement/>
+				<text><![CDATA[TL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="153c5f24-9ce5-4f0a-885f-39dbe98e468e" style="Column header" x="204" y="3" width="44" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[SMS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="75e0dfe8-a6b4-467f-885b-6424e2e08952" style="Column header" x="264" y="3" width="42" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[Arama.S]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b687d3b5-b7ca-4ee2-8919-1a3b9e27c434" style="Column header" x="333" y="3" width="55" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[T.Süredk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0830046c-6663-44b6-9d4f-f53792eb01bf" style="Column header" x="433" y="3" width="64" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[Arama Uc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bb3023c5-0a87-4786-9cb5-006fe28b1ec2" style="Column header" x="502" y="3" width="50" height="15" forecolor="#006633"/>
+				<textElement/>
+				<text><![CDATA[SMS Uc.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="df86e454-9fb7-4efc-9c07-288ad7d87f49" x="373" y="65" width="155" height="35" forecolor="#FF3333"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total_number}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
