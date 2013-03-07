@@ -22,6 +22,7 @@ import vodafone.islemler.GorusmeleriDuzenle;
 import vodafone.islemler.MergePDF;
 import vodafone.islemler.PieChartPrepare;
 import vodafone.pojolar.OperatoreGorePojo;
+import vodafone.pojolar.VodafoneDataSource;
 
 /**
  *
@@ -31,7 +32,7 @@ public class NewClass {
 
     private ArrayList<ArrayList<String>> gorusmeler;
     private String outputPath = "";
-    private Connection con = null;
+    
     
     public NewClass(String fileName, String contextPath) {
         try {
@@ -54,8 +55,8 @@ public class NewClass {
                 //Bir database memory insert işlemleri
                 DatabaseInsert dinsert = new DatabaseInsert(opgore.getDatabasepojo());
 
-                dinsert.kaydetDatabase();
-                Connection con = dinsert.getConnection();
+                 VodafoneDataSource data_source =  dinsert.kaydetDatabase();
+                
 
                 //PieChartları Hazırla
                 PieChartPrepare prepare = new PieChartPrepare(opgore);
@@ -78,7 +79,7 @@ public class NewClass {
                 outputPath = contextPath + "VodafoneRaporlar\\" + aboneNumara + "##" + tarih_araligi.replaceAll("/", "-").replaceAll(" ", "##") + ".pdf";
 
                 export.setAboneNumara(aboneNumara);
-                export.setConnection(con);
+                export.setData_source(data_source);
                 export.setToplamKisiNumber(toplam_kisi_no);
                 export.setSubReportParamaters(prepare.getSure_bazli_img(), prepare.getNumara_sayisina_gore(), prepare.getArama_ucret(), prepare.getMesaj_ucret(), prepare.getMesaj_sayisi());
 
@@ -91,25 +92,14 @@ public class NewClass {
                     OutputStream output = new FileOutputStream(outputPath);
                     MergePDF.concatPDFs(pdfs, output, true);
 
-
                 } catch (Exception ex) {
                     Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-            }
-
-            
-            
+            }   
         } catch (Exception ex) {
             Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            
         }
     }
 

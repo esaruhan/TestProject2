@@ -14,17 +14,19 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import vodafone.pojolar.VodafoneDataSource;
 /**
  *
  * @author LifeBook
  */
 public class ExportPDF {
          
-         Connection connection = null;
+         
          
          String tarih_araligi = "";
          String abone_numara  ="";
-         
+         VodafoneDataSource  data_source = new VodafoneDataSource();
          Image sure_bazli_img;
 	 Image numara_sayisina_gore;
 	 Image arama_ucret;
@@ -46,9 +48,7 @@ public class ExportPDF {
         public void setToplamKisiNumber(int no){
             toplam_numara = no ;
         }
-        public void setConnection(Connection con ){
-            connection = con ;
-        }
+      
         
         public void setSubReportParamaters( Image sure_bazli_img, Image numara_sayisina_gore, Image arama_ucret,	 Image mesaj_ucret,	 Image mesaj_sayisi){
 		
@@ -83,21 +83,20 @@ public class ExportPDF {
 	        hm.put("total_number", toplam_numara);
 	        hm.put("arama_icon", arama_img);
 	        hm.put("mesaj_icon", mesaj_img);
-	        
-	        try {
-                           JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, connection);
-                                           
-//	        JasperPrint print  =		JasperFillManager.fillReport(jasperReport, hm,connection );
-			
+	        hm.put("DataFile", "VodafoneDataSource.java - Bean Array");
+                    
+                try {
+                    JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(data_source.getBeanArray()));
 
-                if(connection!=null) 
-	        	 	JasperExportManager.exportReportToPdfFile(print, outFileName);
-	        	
-                 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-                    connection.close();
+                    if(data_source!=null) 
+                    { JasperExportManager.exportReportToPdfFile(print, outFileName);  
+                      System.err.println("");
+                    }
+
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                 } finally {
+
                 }
 		
 		
@@ -134,4 +133,16 @@ public class ExportPDF {
 //		JasperPrint jasperPrint =  JasperFillManager.fillReport(jasperReport, hm,new  JREmptyDataSource() );
 		JasperExportManager.exportReportToPdfFile(jasperPrint, outFileName);
         }
+
+    public VodafoneDataSource getData_source() {
+        return data_source;
+    }
+
+    public void setData_source(VodafoneDataSource data_source) {
+        this.data_source = data_source;
+    }
+        
+        
+        
+        
 }
