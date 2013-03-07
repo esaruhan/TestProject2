@@ -84,6 +84,7 @@ public class VodafonePojo {
     public void setOrtalamaGorusme(Double ortalamaGorusme) {
         this.ortalamaGorusme = ortalamaGorusme;
     }
+
    
    
    

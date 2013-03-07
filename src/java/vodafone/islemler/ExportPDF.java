@@ -94,6 +94,7 @@ public class ExportPDF {
 
                  } catch (Exception e) {
                      e.printStackTrace();
+                      System.err.println("Vodafone Hata"+e);
                  } finally {
 
                 }

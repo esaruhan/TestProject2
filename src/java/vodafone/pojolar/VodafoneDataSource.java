@@ -7,6 +7,7 @@ package vodafone.pojolar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  *
@@ -26,7 +27,7 @@ public  Object[] getBeanArray()
         return data.toArray();
 }
 public  Collection getBeanCollection()
-{
+{   
         return Arrays.asList(data);
 }
     

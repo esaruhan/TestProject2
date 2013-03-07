@@ -51,11 +51,7 @@ public class DatabaseInsert {
                             vpojo.setOperator(operator);
                             vpojo.setMesajSayisi(mesaj_sayisi);
                             vpojo.setAramaSayisi(arama_sayisi);
-                            if(!dpojo.getOperator().equalsIgnoreCase("Internet")) {
-                                vpojo.setToplamDakika(toplam_arama_dakika);
-                            } else {
-                                vpojo.setToplamDakika(internet_miktar);
-                            }
+                            vpojo.setToplamDakika(toplam_arama_dakika);           
                             vpojo.setToplamAramaUcret(toplam_arama_ucret);
                             vpojo.setToplamMesajUcret(toplam_mesaj_ucret);
                             vpojo.setOrtalamaGorusme(ortalama_gorusme);
