@@ -96,7 +96,7 @@ public class GorusmeleriDuzenle {
                       operatorler.getSabithat().get(numara).add(telpojo);
                 }
                 
-            }  else if (type.equalsIgnoreCase("İnternet Kullanımı")&numara.equalsIgnoreCase("Internet")){
+            }  else if (type.contains("nternet")||numara.equalsIgnoreCase("Internet")){
                 telpojo.setOperator("Internet");
                 telpojo.setType("Internet");
                
