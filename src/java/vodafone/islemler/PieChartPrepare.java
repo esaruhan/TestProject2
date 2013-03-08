@@ -34,8 +34,10 @@ public class PieChartPrepare {
 	 *  5 - Atï¿½lan mesaj ï¿½cretine gï¿½re Yï¿½zdelik  - Operatore gore mesaj ï¿½cretini baz alarak
 	 */
    
-	OperatoreGorePojo opgore = null ;
+	private OperatoreGorePojo opgore = null ;
 	
+        private HashMap<String, Operator> operatorler = new HashMap<String,Operator>();
+        
 	// Toplam ları bulmak için , PİE Chartta toplamları bilirsek
         // oranlama imkanımız olacak.
 	int aramaSayisi = 0;
@@ -72,13 +74,13 @@ public class PieChartPrepare {
 		 sabithat    = degerHesapla(opgore.getSabithat(), "SABIT");
 		 diger 	     = degerHesapla(opgore.getDiger(),"Diğer/Yurtdışı");
 		
-                 
-                 
-                 calculateTotals(turkcel);
-                 calculateTotals(vodafone);
-                 calculateTotals(avea);
-                 calculateTotals(sabithat);
-                 calculateTotals(diger);
+                
+                 calculateTotals(turkcel,"Turkcell");
+                 calculateTotals(vodafone,"Vodafone");
+                 calculateTotals(avea,"Avea");
+                 calculateTotals(sabithat,"SabitHat");
+                 calculateTotals(diger,"Diğer Operatorler");         
+                
 	}
 	public void createPirCharsAll() throws Exception{
 		
@@ -87,18 +89,9 @@ public class PieChartPrepare {
 		 arama_ucret  				= createPieChart_Arama_UcreteGore();
 		 mesaj_ucret  				= createPieChart_Mesaj_UcreteGore();
 		 mesaj_sayisi				= createPieChart_Mesaj_SayisinaGore();
-		
-	    //exportPDF(sure_bazli_img, numara_sayisina_gore, arama_ucret, mesaj_ucret ,mesaj_sayisi);
-		
+   	       //exportPDF(sure_bazli_img, numara_sayisina_gore, arama_ucret, mesaj_ucret ,mesaj_sayisi);		
 	}
-	// Mesaj Sayisina Gï¿½re
-	// MEsaj ï¿½cretine Gï¿½re
-	// Arama ï¿½cretine Gï¿½re
-	// Aranan Sayi - Yani Abone ï¿½cretine Gï¿½re
-	//Arama Sï¿½resine Gï¿½re
-	/*
-	 * Arama Sayisina Gï¿½re , 
-	 */
+
 	public Image createPieChart_Mesaj_SayisinaGore(){
 		
 		Double calculate_total_aranan = (double)(turkcel.getMesaj_sayisi() + avea.getMesaj_sayisi() + vodafone.getMesaj_sayisi() + sabithat.getMesaj_sayisi() + diger.getMesaj_sayisi());
@@ -286,7 +279,7 @@ public class PieChartPrepare {
         }
 
         
-        public void calculateTotals(Operator op ){
+        public void calculateTotals(Operator op ,String operatorName){
 	
 		 aramaSayisi 		+= op.getArama_sayisi();
 		 mesajSayisi 		+= op.getMesaj_sayisi();
@@ -295,6 +288,7 @@ public class PieChartPrepare {
 		 toplamAramaUcret 	+= op.getArama_ucret();
 		 toplamNumara           += op.getNumara_sayisi();
 		
+                 operatorler.put(operatorName, op);
 	}
                 
 	public Double calculatePercentage(Double sure , Double total_sure ){

@@ -59,7 +59,7 @@ public class ExportPDF {
 	} 
         
         public void exportSecondReport(String outFileName) throws SQLException{
-           JasperReport jasperReport = null ;
+                 JasperReport jasperReport = null ;
 		 String source_filename  = "C:\\VodafoneRaporlar\\MySqlReport3.jasper";
 	
 		
