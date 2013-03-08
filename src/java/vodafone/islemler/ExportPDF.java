@@ -35,7 +35,7 @@ public class ExportPDF {
 	 int toplam_numara = 0 ;
          
         public void setTarihAraligi(String tarih1, String tarih2){
-		tarih_araligi = tarih1.split(" ")[0]+" - "+tarih2.split(" ")[0];
+		tarih_araligi = tarih2.split(" ")[0]+" - "+tarih1.split(" ")[0];
 	}
         public String getTarihAraligi(){
             return tarih_araligi;

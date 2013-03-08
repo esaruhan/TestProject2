@@ -8,8 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +21,7 @@ import vodafone.islemler.MergePDF;
 import vodafone.islemler.PieChartPrepare;
 import vodafone.pojolar.OperatoreGorePojo;
 import vodafone.pojolar.VodafoneDataSource;
+import vodafone.tarife_oner_islemler.Singleton;
 
 /**
  *
@@ -41,7 +40,9 @@ public class NewClass {
             DosyadanOkuma dokuma = new DosyadanOkuma();
 
             gorusmeler = dokuma.dosyaOkuFromFile(fileName);
-
+            
+            Singleton.getInstance().setContextPath(contextPath);
+            
             if (gorusmeler != null && !gorusmeler.isEmpty() & gorusmeler.size() > 5) {
                 
                 String aboneNumara = dokuma.getAboneNumara();
