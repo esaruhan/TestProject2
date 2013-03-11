@@ -5,83 +5,38 @@
 package vodafone.pojolar;
 
 
-public	class  Operator {
+public	class  Operator extends Operator1{
 	
 	
-	public String operator = "";
-	
-	
-	public Double mesaj_ucret = 0.0 ;
-	public Double arama_ucret = 0.0 ;
-	public Double toplam_sure = 0.0 ;
-	public Double toplam_periyod_sure = 0.0;
-        
-	public int arama_sayisi = 0;
-	public int mesaj_sayisi = 0 ;
-	public int numara_sayisi = 0;
 
-    public Double getToplam_periyod_sure() {
-        return toplam_periyod_sure;
+   public Double mesaj_ucret = 0.0 ;
+   public Double arama_ucret = 0.0 ;
+   public Integer arama_sayisi = 0;
+   
+    public Double getMesaj_ucret() {
+        return mesaj_ucret;
     }
 
-    public void setToplam_periyod_sure(Double toplam_periyod_sure) {
-        this.toplam_periyod_sure = toplam_periyod_sure;
+    public void setMesaj_ucret(Double mesaj_ucret) {
+        this.mesaj_ucret = mesaj_ucret;
     }
 
-	
-	public String getOperator() {
-		return operator;
-	}
+    public Double getArama_ucret() {
+        return arama_ucret;
+    }
 
-	public void setOperator(String operator) {
-		this.operator = operator;
-	}
+    public void setArama_ucret(Double arama_ucret) {
+        this.arama_ucret = arama_ucret;
+    }
 
-	public Double getMesaj_ucret() {
-		return mesaj_ucret;
-	}
+    public Integer getArama_sayisi() {
+        return arama_sayisi;
+    }
 
-	public void setMesaj_ucret(Double mesajUcret) {
-		mesaj_ucret = mesajUcret;
-	}
+    public void setArama_sayisi(Integer arama_sayisi) {
+        this.arama_sayisi = arama_sayisi;
+    }
 
-	public Double getArama_ucret() {
-		return arama_ucret;
-	}
 
-	public void setArama_ucret(Double aramaUcret) {
-		arama_ucret = aramaUcret;
-	}
 
-	public Double getToplam_sure() {
-		return toplam_sure;
-	}
-
-	public void setToplam_sure(Double toplamSure) {
-		toplam_sure = toplamSure;
-	}
-
-	public int getArama_sayisi() {
-		return arama_sayisi;
-	}
-
-	public void setArama_sayisi(int aramaSayisi) {
-		arama_sayisi = aramaSayisi;
-	}
-
-	public int getMesaj_sayisi() {
-		return mesaj_sayisi;
-	}
-
-	public void setMesaj_sayisi(int mesajSayisi) {
-		mesaj_sayisi = mesajSayisi;
-	}
-
-	public int getNumara_sayisi() {
-		return numara_sayisi;
-	}
-
-	public void setNumara_sayisi(int numaraSayisi) {
-		numara_sayisi = numaraSayisi;
-	}
 }

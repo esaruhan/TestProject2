@@ -21,6 +21,7 @@ import vodafone.islemler.GorusmeleriDuzenle;
 import vodafone.islemler.MergePDF;
 import vodafone.islemler.PieChartPrepare;
 import vodafone.pojolar.Operator;
+import vodafone.pojolar.OperatorDataSource;
 import vodafone.pojolar.OperatoreGorePojo;
 import vodafone.pojolar.VodafoneDataSource;
 import vodafone.tarife_oner_islemler.Singleton;
@@ -63,7 +64,7 @@ public class NewClass {
 
                 //PieChartları Hazırla
                 PieChartPrepare prepare = new PieChartPrepare(opgore);
-                
+               
                 try {
                     prepare.hesapla();
                     prepare.createPirCharsAll();
@@ -71,40 +72,37 @@ public class NewClass {
                     Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
                 }
                
-                HashMap<String,Operator> gorusme_rapor = prepare.getOperatorler();
-                Double vodafone_periyod_sure = gorusme_rapor.get("Vodafone").getToplam_periyod_sure();
-                Double digeryone_periyod_sure = gorusme_rapor.get("Diğer Operatorler").getToplam_periyod_sure();
-                Double heryone_periyod_sure   = gorusme_rapor.get("Turkcell").getToplam_periyod_sure() + gorusme_rapor.get("Avea").getToplam_periyod_sure() +gorusme_rapor.get("SabitHat").getToplam_periyod_sure();       
-               
+                 OperatorDataSource source = new OperatorDataSource();
+                                    source.setData(opgore.getOperatorler_rapor());
                 
-                System.err.println("Toplam Periyod Saniye:"+prepare.getToplamPeriyodSure());
+                
                 
                 int toplam_kisi_no = prepare.getToplamNumara();
-
+                System.err.println("kisi toplam"+toplam_kisi_no);
                 //Raporları Çıkartabilirsinizin
                 ExportPDF export = new ExportPDF();
-                export.setVodafone_periyod_sure(vodafone_periyod_sure);
-                export.setDigeryone_periyod_sure(digeryone_periyod_sure);
-                export.setHeryone_periyod_sure(heryone_periyod_sure);
                 export.setTarihAraligi(gorusmeler.get(3).get(0), gorusmeler.get(gorusmeler.size() - 1).get(0));
                 String tarih_araligi = export.getTarihAraligi();
 //                export.setToplam_periyod_sure();
-
                 String firstReportOut = contextPath + "VodafoneRaporlar\\" + aboneNumara + "##" + tarih_araligi.replaceAll("/", "-").replaceAll(" ", "##") + "##FirstPage.pdf";
                 String secondReportOut = contextPath + "VodafoneRaporlar\\" + aboneNumara + "##" + tarih_araligi.replaceAll("/", "-").replaceAll(" ", "##") + "##SecondPage.pdf";
+               String  thirdReportOut = contextPath + "VodafoneRaporlar\\" + aboneNumara + "##" + tarih_araligi.replaceAll("/", "-").replaceAll(" ", "##") + "##ThirdPage.pdf";
                 outputPath = contextPath + "VodafoneRaporlar\\" + aboneNumara + "##" + tarih_araligi.replaceAll("/", "-").replaceAll(" ", "##") + ".pdf";
-
                 export.setAboneNumara(aboneNumara);
                 export.setData_source(data_source);
+                export.setOperator_data_source(source);
                 export.setToplamKisiNumber(toplam_kisi_no);
+                
                 export.setSubReportParamaters(prepare.getSure_bazli_img(), prepare.getNumara_sayisina_gore(), prepare.getArama_ucret(), prepare.getMesaj_ucret(), prepare.getMesaj_sayisi());
 
                 try {
                     export.exportFirstReport(firstReportOut);
                     export.exportSecondReport(secondReportOut);
+                    export.exportThirdReport(thirdReportOut);
                     List<InputStream> pdfs = new ArrayList<InputStream>();
                     pdfs.add(new FileInputStream(firstReportOut));
                     pdfs.add(new FileInputStream(secondReportOut));
+                    pdfs.add(new FileInputStream(thirdReportOut));
                     OutputStream output = new FileOutputStream(outputPath);
                     MergePDF.concatPDFs(pdfs, output, true);
 

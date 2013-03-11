@@ -14,6 +14,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import vodafone.pojolar.OperatorDataSource;
 import vodafone.pojolar.VodafoneDataSource;
 /**
  *
@@ -22,14 +23,11 @@ import vodafone.pojolar.VodafoneDataSource;
 public class ExportPDF {
          
          
-         Double toplam_periyod_sure = 0.0;
-         Double vodafone_periyod_sure = 0.0;
-         Double heryone_periyod_sure = 0.0;
-         Double digeryone_periyod_sure = 0.0;
-         
          String tarih_araligi = "";
          String abone_numara  ="";
          VodafoneDataSource  data_source = new VodafoneDataSource();
+         OperatorDataSource  operator_data_source = new OperatorDataSource();
+         
          Image sure_bazli_img;
 	 Image numara_sayisina_gore;
 	 Image arama_ucret;
@@ -52,14 +50,6 @@ public class ExportPDF {
             toplam_numara = no ;
         }
 
-    public Double getToplam_periyod_sure() {
-        return toplam_periyod_sure;
-    }
-
-    public void setToplam_periyod_sure(Double toplam_periyod_sure) {
-        this.toplam_periyod_sure = toplam_periyod_sure;
-    }
-      
         
         public void setSubReportParamaters( Image sure_bazli_img, Image numara_sayisina_gore, Image arama_ucret,	 Image mesaj_ucret,	 Image mesaj_sayisi){
 		
@@ -95,9 +85,7 @@ public class ExportPDF {
 	        hm.put("arama_icon", arama_img);
 	        hm.put("mesaj_icon", mesaj_img);
 	        hm.put("DataFile", "VodafoneDataSource.java - Bean Array");
-                hm.put("heryone_dakika", heryone_periyod_sure/60);
-                hm.put("vodafone_dakika",vodafone_periyod_sure/60);
-                hm.put("digeryone_dakika", digeryone_periyod_sure/60);
+                
                 
                 try {
                     JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(data_source.getBeanArray()));
@@ -149,6 +137,31 @@ public class ExportPDF {
 		JasperExportManager.exportReportToPdfFile(jasperPrint, outFileName);
         }
 
+        public void exportThirdReport(String outFileName) throws Exception {
+                 JasperReport jasperReport = null ;
+		 String source_filename  = "C:\\VodafoneRaporlar\\SonucRapor.jasper";
+	
+                
+                HashMap hm = new HashMap();
+                hm.put("faturaTarih", tarih_araligi);
+                hm.put("DataFile", "OperatorDataSource.java - Bean Array");
+                
+                try {
+                        JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(data_source.getBeanArray()));
+
+                        if(data_source!=null) 
+                        { JasperExportManager.exportReportToPdfFile(print, outFileName);  
+                          System.err.println("");
+                        }
+
+                 } catch (Exception e) {
+                            e.printStackTrace();
+                            System.err.println("Vodafone Hata"+e);
+                 } finally {
+
+                }
+            
+        }
     public VodafoneDataSource getData_source() {
         return data_source;
     }
@@ -157,29 +170,14 @@ public class ExportPDF {
         this.data_source = data_source;
     }
 
-    public Double getVodafone_periyod_sure() {
-        return vodafone_periyod_sure;
+    public OperatorDataSource getOperator_data_source() {
+        return operator_data_source;
     }
 
-    public void setVodafone_periyod_sure(Double vodafone_periyod_sure) {
-        this.vodafone_periyod_sure = vodafone_periyod_sure;
+    public void setOperator_data_source(OperatorDataSource operator_data_source) {
+        this.operator_data_source = operator_data_source;
     }
 
-    public Double getHeryone_periyod_sure() {
-        return heryone_periyod_sure;
-    }
-
-    public void setHeryone_periyod_sure(Double heryone_periyod_sure) {
-        this.heryone_periyod_sure = heryone_periyod_sure;
-    }
-
-    public Double getDigeryone_periyod_sure() {
-        return digeryone_periyod_sure;
-    }
-
-    public void setDigeryone_periyod_sure(Double digeryone_periyod_sure) {
-        this.digeryone_periyod_sure = digeryone_periyod_sure;
-    }
         
         
         

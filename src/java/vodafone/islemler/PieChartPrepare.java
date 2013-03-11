@@ -22,6 +22,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.Rotation;
 import vodafone.pojolar.Operator;
+import vodafone.pojolar.Operator1;
 import vodafone.pojolar.OperatoreGorePojo;
 import vodafone.pojolar.TelefonPojo;
 
@@ -37,7 +38,7 @@ public class PieChartPrepare {
 	private OperatoreGorePojo opgore = null ;
 	
         private HashMap<String, Operator> operatorler = new HashMap<String,Operator>();
-        
+        private HashMap<String, Operator1> operatorler1 = new HashMap<String,Operator1>();
        
 	// Toplam ları bulmak için , PİE Chartta toplamları bilirsek
         // oranlama imkanımız olacak.
@@ -87,6 +88,8 @@ public class PieChartPrepare {
                  calculateTotals(sabithat,"SabitHat");
                  calculateTotals(diger,"Diğer Operatorler");         
                 
+                 opgore.setOperatorler_rapor(new ArrayList<Operator1>(operatorler1.values()));
+                 
 	}
 	public void createPirCharsAll() throws Exception{
 		
@@ -293,9 +296,10 @@ public class PieChartPrepare {
 		 toplamMesajUcret 	+= op.getMesaj_ucret();
 		 toplamAramaUcret 	+= op.getArama_ucret();
 		 toplamNumara           += op.getNumara_sayisi();
-		toplamPeriyodSure       += op.getToplam_periyod_sure();
+		 toplamPeriyodSure       += op.getToplam_periyod_sure();
                 
                  operatorler.put(operatorName, op);
+                 operatorler1.put(operatorName, op);
 	}
                 
 	public Double calculatePercentage(Double sure , Double total_sure ){
