@@ -147,7 +147,7 @@ public class ExportPDF {
                 hm.put("DataFile", "OperatorDataSource.java - Bean Array");
                 
                 try {
-                        JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(data_source.getBeanArray()));
+                        JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(operator_data_source.getBeanArray()));
 
                         if(data_source!=null) 
                         { JasperExportManager.exportReportToPdfFile(print, outFileName);  
