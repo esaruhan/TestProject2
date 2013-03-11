@@ -14,10 +14,19 @@ public	class  Operator {
 	public Double mesaj_ucret = 0.0 ;
 	public Double arama_ucret = 0.0 ;
 	public Double toplam_sure = 0.0 ;
-	
+	public Double toplam_periyod_sure = 0.0;
+        
 	public int arama_sayisi = 0;
 	public int mesaj_sayisi = 0 ;
 	public int numara_sayisi = 0;
+
+    public Double getToplam_periyod_sure() {
+        return toplam_periyod_sure;
+    }
+
+    public void setToplam_periyod_sure(Double toplam_periyod_sure) {
+        this.toplam_periyod_sure = toplam_periyod_sure;
+    }
 
 	
 	public String getOperator() {

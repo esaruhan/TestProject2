@@ -19,7 +19,9 @@ public class OperatoreGorePojo {
                 
             
 	}
-
+        
+        ArrayList<Operator> operatorler_rapor = new ArrayList<Operator>();
+        
 	HashMap<String, ArrayList<TelefonPojo>> turkcell    = new HashMap<String, ArrayList<TelefonPojo>>();
 	HashMap<String, ArrayList<TelefonPojo>> vodafone    = new HashMap<String, ArrayList<TelefonPojo>>();
 	HashMap<String, ArrayList<TelefonPojo>> avea        = new HashMap<String, ArrayList<TelefonPojo>>();
@@ -88,6 +90,14 @@ public class OperatoreGorePojo {
         public void setDatabasepojo(HashMap<String, DatabasePojo> databasepojo) {
             this.databasepojo = databasepojo;
         }
+
+    public ArrayList<Operator> getOperatorler_rapor() {
+        return operatorler_rapor;
+    }
+
+    public void setOperatorler_rapor(ArrayList<Operator> operatorler_rapor) {
+        this.operatorler_rapor = operatorler_rapor;
+    }
         
     
 }

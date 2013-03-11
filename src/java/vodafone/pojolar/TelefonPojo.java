@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public class TelefonPojo {
     
+    private String aranan_ismi = "";
     private String numara   = "" ;
     private String operator = "" ;
     private String type     = "" ;
@@ -19,7 +20,8 @@ public class TelefonPojo {
     private Double sure     = 0.0;
     private Double tutar    = 0.0;
     private Date   date     ;
-
+    private Double periyod_sure = 0.0;
+    
     public String getNumara() {
         return numara;
     }
@@ -74,6 +76,22 @@ public class TelefonPojo {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getAranan_ismi() {
+        return aranan_ismi;
+    }
+
+    public void setAranan_ismi(String aranan_ismi) {
+        this.aranan_ismi = aranan_ismi;
+    }
+
+    public Double getPeriyod_sure() {
+        return periyod_sure;
+    }
+
+    public void setPeriyod_sure(Double periyod_sure) {
+        this.periyod_sure = periyod_sure;
     }
     
     

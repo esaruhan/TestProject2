@@ -9,7 +9,8 @@ package vodafone.pojolar;
  * @author LifeBook
  */
 public class DatabasePojo {
-    
+        
+        private String aranan_ismi          = "";
     	private String numara               = "";
 	private String operator             = "";
 	private int mesajSayisi             = 0;
@@ -19,7 +20,7 @@ public class DatabasePojo {
 	private Double toplamAramaDakika    = 0.0;
 	private Double ortalamaGorusme      = 0.0;
 	private Double toplamMiktar         = 0.0;
-	
+	private Double toplamPeriyodSure    = 0.0;
 
 	public String getNumara() {
 		return this.numara;
@@ -45,6 +46,19 @@ public class DatabasePojo {
 		this.operator = operator;
 	}
 
+        public Double getToplamPeriyodSure() {
+            return toplamPeriyodSure;
+        }
+
+        public void setToplamPeriyodSure(Double toplamPeriyodSure) {
+            this.toplamPeriyodSure = toplamPeriyodSure;
+        }
+            public void incrementToplamPeriyodSure(double saniye){
+		
+		toplamPeriyodSure = toplamPeriyodSure + saniye;
+		
+	}
+        
 	public int getMesajSayisi() {
 		return this.mesajSayisi;
 	}
@@ -165,6 +179,15 @@ public class DatabasePojo {
                 }
 		
 	}
+
+    public String getAranan_ismi() {
+        return aranan_ismi;
+    }
+
+    public void setAranan_ismi(String aranan_ismi) {
+        this.aranan_ismi = aranan_ismi;
+    }
 	
     
+        
 }

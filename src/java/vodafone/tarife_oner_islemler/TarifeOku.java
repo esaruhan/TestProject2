@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import vodafone.pojolar.TarifePojo;
 
 /**
@@ -39,7 +38,7 @@ public class TarifeOku {
               //  System.out.println(line);
                 TarifePojo tpojo = new TarifePojo();                
                 String values [] = line.split(";");
-                System.out.println( "Array Size"+values.length);
+              //  System.out.println( "Array Size"+values.length);
                 tpojo.setTarife_ismi(values[0]);
                 tpojo.setTarife_grubu(values[1]);
                 tpojo.setHer_yone_dakika(values[2].equalsIgnoreCase("SINIRSIZ")?99999:values[2].contains("######")?0:Integer.parseInt(values[2]));

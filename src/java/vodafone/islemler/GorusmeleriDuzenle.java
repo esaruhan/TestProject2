@@ -23,14 +23,16 @@ public class GorusmeleriDuzenle {
         
         OperatoreGorePojo operatorler = new OperatoreGorePojo();
         
-        for(int i = 3 ;gorusmeler!=null & i<gorusmeler.size() ; i ++){
+        System.err.println("Gorusmeler Duzenleme Size:"+gorusmeler.size());
+        
+        for(int i = 2;gorusmeler!=null & i<gorusmeler.size() ; i ++){
             
             ArrayList<String>  line = gorusmeler.get(i);
             
             String tarih        = line.get(0);
             String type         = line.get(1);
             String numara       = line.get(2);
-            String bos_alan     = line.get(3);
+            String aranan_ismi     = line.get(3);
             String operator     = line.get(4);
             String sure         = line.get(5);
             String tutar        = line.get(6);
@@ -43,6 +45,7 @@ public class GorusmeleriDuzenle {
             telpojo.setTarih(tarih);
             telpojo.setDate(ConvertToDate(tarih));
             telpojo.setType(type);
+            telpojo.setAranan_ismi(aranan_ismi);
             
             if(type.equalsIgnoreCase("Telefon")){
                   telpojo.setSure(Utils.checkAndReturnLong(sure));

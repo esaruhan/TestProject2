@@ -34,7 +34,8 @@ public class DatabaseInsert {
                                 String numara = it1.next();
 
                                 DatabasePojo dpojo = databasePojolar.get(numara);
-
+                                
+                                String aranan_ismi                      =               dpojo.getAranan_ismi();
                                 String 	operator 			= 		dpojo.getOperator();
                                 int 	arama_sayisi 			= 		dpojo.getAramaSayisi();
                                 int 	mesaj_sayisi 			=		dpojo.getMesajSayisi();
@@ -43,11 +44,13 @@ public class DatabaseInsert {
                                 double toplam_arama_dakika              = 		dpojo.getToplamAramaDakika();
                                 double ortalama_gorusme    		= 		dpojo.getOrtalamaGorusme();
                                 double internet_miktar     		= 		dpojo.getToplamMiktar();
-
-
+                                
+                                
+                            System.err.println(aranan_ismi);
                             VodafonePojo vpojo = new VodafonePojo(); 
-                            
-                            vpojo.setNumara(numara);
+                            if(!aranan_ismi.isEmpty())
+                            vpojo.setNumara(aranan_ismi);
+                            else   vpojo.setNumara(numara);
                             vpojo.setOperator(operator);
                             vpojo.setMesajSayisi(mesaj_sayisi);
                             vpojo.setAramaSayisi(arama_sayisi);

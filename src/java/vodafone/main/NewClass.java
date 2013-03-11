@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,7 @@ import vodafone.islemler.ExportPDF;
 import vodafone.islemler.GorusmeleriDuzenle;
 import vodafone.islemler.MergePDF;
 import vodafone.islemler.PieChartPrepare;
+import vodafone.pojolar.Operator;
 import vodafone.pojolar.OperatoreGorePojo;
 import vodafone.pojolar.VodafoneDataSource;
 import vodafone.tarife_oner_islemler.Singleton;
@@ -61,19 +63,32 @@ public class NewClass {
 
                 //PieChartları Hazırla
                 PieChartPrepare prepare = new PieChartPrepare(opgore);
+                
                 try {
                     prepare.hesapla();
                     prepare.createPirCharsAll();
                 } catch (Exception ex) {
                     Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
                 }
+               
+                HashMap<String,Operator> gorusme_rapor = prepare.getOperatorler();
+                Double vodafone_periyod_sure = gorusme_rapor.get("Vodafone").getToplam_periyod_sure();
+                Double digeryone_periyod_sure = gorusme_rapor.get("Diğer Operatorler").getToplam_periyod_sure();
+                Double heryone_periyod_sure   = gorusme_rapor.get("Turkcell").getToplam_periyod_sure() + gorusme_rapor.get("Avea").getToplam_periyod_sure() +gorusme_rapor.get("SabitHat").getToplam_periyod_sure();       
+               
+                
+                System.err.println("Toplam Periyod Saniye:"+prepare.getToplamPeriyodSure());
+                
                 int toplam_kisi_no = prepare.getToplamNumara();
 
                 //Raporları Çıkartabilirsinizin
                 ExportPDF export = new ExportPDF();
+                export.setVodafone_periyod_sure(vodafone_periyod_sure);
+                export.setDigeryone_periyod_sure(digeryone_periyod_sure);
+                export.setHeryone_periyod_sure(heryone_periyod_sure);
                 export.setTarihAraligi(gorusmeler.get(3).get(0), gorusmeler.get(gorusmeler.size() - 1).get(0));
                 String tarih_araligi = export.getTarihAraligi();
-
+//                export.setToplam_periyod_sure();
 
                 String firstReportOut = contextPath + "VodafoneRaporlar\\" + aboneNumara + "##" + tarih_araligi.replaceAll("/", "-").replaceAll(" ", "##") + "##FirstPage.pdf";
                 String secondReportOut = contextPath + "VodafoneRaporlar\\" + aboneNumara + "##" + tarih_araligi.replaceAll("/", "-").replaceAll(" ", "##") + "##SecondPage.pdf";

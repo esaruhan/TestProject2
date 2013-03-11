@@ -38,8 +38,11 @@ public class PieChartPrepare {
 	
         private HashMap<String, Operator> operatorler = new HashMap<String,Operator>();
         
+       
 	// Toplam ları bulmak için , PİE Chartta toplamları bilirsek
         // oranlama imkanımız olacak.
+        int toplam_gorusme = 0 ;
+        
 	int aramaSayisi = 0;
 	int mesajSayisi = 0 ;
 	int toplamNumara = 0;
@@ -47,6 +50,8 @@ public class PieChartPrepare {
 	Double toplamMesajUcret = 0.0 ;
 	Double toplamAramaUcret = 0.0 ;
 	
+        Double toplamPeriyodSure = 0.0;
+        
 	Operator turkcel = null ;
 	Operator vodafone = null ;
 	Operator avea = null ;
@@ -74,6 +79,7 @@ public class PieChartPrepare {
 		 sabithat    = degerHesapla(opgore.getSabithat(), "SABIT");
 		 diger 	     = degerHesapla(opgore.getDiger(),"Diğer/Yurtdışı");
 		
+                 System.err.println("Toplam Gorusme"+toplam_gorusme);
                 
                  calculateTotals(turkcel,"Turkcell");
                  calculateTotals(vodafone,"Vodafone");
@@ -287,7 +293,8 @@ public class PieChartPrepare {
 		 toplamMesajUcret 	+= op.getMesaj_ucret();
 		 toplamAramaUcret 	+= op.getArama_ucret();
 		 toplamNumara           += op.getNumara_sayisi();
-		
+		toplamPeriyodSure       += op.getToplam_periyod_sure();
+                
                  operatorler.put(operatorName, op);
 	}
                 
@@ -309,7 +316,9 @@ public class PieChartPrepare {
 		Double mesaj_ucret = 0.0 ;
 		Double arama_ucret = 0.0 ;
 		Double toplam_sure = 0.0 ;
-		
+		Double toplam_periyod_sure = 0.0;
+                
+                
 		int arama_sayisi = 0;
 		int mesaj_sayisi = 0 ;
 		
@@ -321,18 +330,20 @@ public class PieChartPrepare {
 			
 			ArrayList<TelefonPojo> pojolar  = telpojo.get(numara);
 			
-                        
+                        toplam_gorusme += pojolar.size();
 			for(int i = 0 ; i<pojolar.size();i++){
 				
 				TelefonPojo  pojo = pojolar.get(i);
 
 				 Double  sure		=pojo.getSure();
 				 Double  tutar		=pojo.getTutar();
-
+                                 
 				 if(pojo.getType().equalsIgnoreCase("Telefon")){
 					 
 					 arama_ucret = arama_ucret + tutar;
 					 toplam_sure = toplam_sure + sure ;
+                                         if(numara.length()>5)
+                                         toplam_periyod_sure = toplam_periyod_sure + calculatePeriyodSure(sure,numara);                                      
 					 arama_sayisi++;
 					 
 				 }else if(pojo.getType().equalsIgnoreCase("SMS")){
@@ -354,13 +365,22 @@ public class PieChartPrepare {
 		oper.setMesaj_ucret(mesaj_ucret);
 		oper.setToplam_sure(toplam_sure);
 		oper.setNumara_sayisi(numara_sayisi);
-		
+		oper.setToplam_periyod_sure(toplam_periyod_sure);
 		
 		oper.setOperator(operator);
 		
 		return oper ;
 	}
-	
+public Double calculatePeriyodSure(Double sure,String numara){
+     
+     if(sure==null || sure==0.0)
+         return 0.0;
+     Double kalan = sure %6;
+     kalan = kalan == 0?6:kalan;
+     Double periyod_sure = sure + (6-kalan);
+//     System.err.print(numara+" Gelen Sure: "+sure +"   Hesaplanan  :      "+periyod_sure);
+     return periyod_sure;   
+ }
 
  public static class PieRenderer
  {
@@ -444,6 +464,15 @@ public class PieChartPrepare {
 		
 		return operator ;
 	}
+
+    public HashMap<String, Operator> getOperatorler() {
+        return operatorler;
+    }
+
+    public void setOperatorler(HashMap<String, Operator> operatorler) {
+        this.operatorler = operatorler;
+    }
+        
         
      static class CustomLabelGenerator implements PieSectionLabelGenerator {
         
@@ -477,4 +506,15 @@ public class PieChartPrepare {
         }
    
     }
+
+    public Double getToplamPeriyodSure() {
+        return toplamPeriyodSure;
+    }
+
+    public void setToplamPeriyodSure(Double toplamPeriyodSure) {
+        this.toplamPeriyodSure = toplamPeriyodSure;
+    }
+     
+     
+     
 }

@@ -60,13 +60,14 @@ public final class DatabaseHazirla {
              
                dataPojo.setNumara(telPojo.getNumara());
                dataPojo.setOperator(telPojo.getOperator());
+               dataPojo.setAranan_ismi(telPojo.getAranan_ismi());
                
                if(telPojo.getType().equalsIgnoreCase("Telefon")){
                    
                    dataPojo.incrementAramaSayisi();
                    dataPojo.incrementToplamAramaUcret(telPojo.getTutar());
                    dataPojo.incrementToplamDakika(telPojo.getSure());
-                   
+                  
                } else if (telPojo.getType().equalsIgnoreCase("SMS")){
                    
                    dataPojo.incrementMesajSayisi();
@@ -84,6 +85,8 @@ public final class DatabaseHazirla {
          }
      }
  }
+ 
+
     
 
 

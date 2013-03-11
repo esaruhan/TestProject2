@@ -22,6 +22,10 @@ import vodafone.pojolar.VodafoneDataSource;
 public class ExportPDF {
          
          
+         Double toplam_periyod_sure = 0.0;
+         Double vodafone_periyod_sure = 0.0;
+         Double heryone_periyod_sure = 0.0;
+         Double digeryone_periyod_sure = 0.0;
          
          String tarih_araligi = "";
          String abone_numara  ="";
@@ -47,6 +51,14 @@ public class ExportPDF {
         public void setToplamKisiNumber(int no){
             toplam_numara = no ;
         }
+
+    public Double getToplam_periyod_sure() {
+        return toplam_periyod_sure;
+    }
+
+    public void setToplam_periyod_sure(Double toplam_periyod_sure) {
+        this.toplam_periyod_sure = toplam_periyod_sure;
+    }
       
         
         public void setSubReportParamaters( Image sure_bazli_img, Image numara_sayisina_gore, Image arama_ucret,	 Image mesaj_ucret,	 Image mesaj_sayisi){
@@ -83,7 +95,10 @@ public class ExportPDF {
 	        hm.put("arama_icon", arama_img);
 	        hm.put("mesaj_icon", mesaj_img);
 	        hm.put("DataFile", "VodafoneDataSource.java - Bean Array");
-                    
+                hm.put("heryone_dakika", heryone_periyod_sure/60);
+                hm.put("vodafone_dakika",vodafone_periyod_sure/60);
+                hm.put("digeryone_dakika", digeryone_periyod_sure/60);
+                
                 try {
                     JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(data_source.getBeanArray()));
 
@@ -140,6 +155,30 @@ public class ExportPDF {
 
     public void setData_source(VodafoneDataSource data_source) {
         this.data_source = data_source;
+    }
+
+    public Double getVodafone_periyod_sure() {
+        return vodafone_periyod_sure;
+    }
+
+    public void setVodafone_periyod_sure(Double vodafone_periyod_sure) {
+        this.vodafone_periyod_sure = vodafone_periyod_sure;
+    }
+
+    public Double getHeryone_periyod_sure() {
+        return heryone_periyod_sure;
+    }
+
+    public void setHeryone_periyod_sure(Double heryone_periyod_sure) {
+        this.heryone_periyod_sure = heryone_periyod_sure;
+    }
+
+    public Double getDigeryone_periyod_sure() {
+        return digeryone_periyod_sure;
+    }
+
+    public void setDigeryone_periyod_sure(Double digeryone_periyod_sure) {
+        this.digeryone_periyod_sure = digeryone_periyod_sure;
     }
         
         
