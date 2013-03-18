@@ -59,10 +59,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jasperreports-javaflow-5.0.0.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.jcommon-1.0.17.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
