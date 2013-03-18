@@ -143,8 +143,11 @@ public class PieChartPrepare {
 		dataset.setValue(vodafone.getOperator(), new Double(vodafone_per));
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
-		
-		String message = "Hiç Mesaja Ücret ödememişsiniz. \n Ya mesaj hakkınız var, Ya da mesaj atmadınız.\n Bu yüzden grafik oluşturulmamıştır";
+                String message = "";
+		if(mesajSayisi>0)
+		   message = "Hiç SMS ye Ücret ödememişsiniz. \n SMS Paketiniz var.\n Bu yüzden grafik oluşturulmamıştır";
+               else if(mesajSayisi==0)
+		   message = "Hiç SMS atmamışsınız\n Bu yüzden grafik oluşturulmamıştır";
 		mesaj_ucret = createPIEChart(dataset,null,message);
 		
 		return mesaj_ucret ;
@@ -169,8 +172,8 @@ public class PieChartPrepare {
 		dataset.setValue(sabithat.getOperator(), new Double(sabit_per));
 		dataset.setValue(diger.getOperator()   , new Double(diger_per));
 		
-	
-		String message = "Hiç aramaya ücret ödememişsiniz. \n Muhtemelen paketinizdeki dakikalarınızı aşmadınız.\n Bu yüzden grafik oluşturulmamıştır.";
+                
+		String message = "Hiç aramaya ücret ödememişsiniz. \n Paketinizdeki dakikalarınızı aşmadınız.\n Bu yüzden grafik oluşturulmamıştır.";
 		Image arama_ucret = createPIEChart(dataset,null,message);
 		
 		return arama_ucret;

@@ -4,47 +4,65 @@
  */
 package vodafone.main;
 
+import java.util.HashMap;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import vodafone.pojolar.Operator1;
+import vodafone.pojolar.OperatorDataSource;
+
 /**
  *
  * @author LifeBook
  */
-public enum PlanetEnumTest {
-    MERCURY (3.303e+23, 2.4397e6),
-    VENUS   (4.869e+24, 6.0518e6),
-    EARTH   (5.976e+24, 6.37814e6),
-    MARS    (6.421e+23, 3.3972e6),
-    JUPITER (1.9e+27,   7.1492e7),
-    SATURN  (5.688e+26, 6.0268e7),
-    URANUS  (8.686e+25, 2.5559e7),
-    NEPTUNE (1.024e+26, 2.4746e7);
+public class PlanetEnumTest {
 
-    private final double mass;   // in kilograms
-    private final double radius; // in meters
-    PlanetEnumTest(double mass, double radius) {
-        this.mass = mass;
-        this.radius = radius;
-    }
-    private double mass() { return mass; }
-    private double radius() { return radius; }
-
-    // universal gravitational constant  (m3 kg-1 s-2)
-    public static final double G = 6.67300E-11;
-
-    double surfaceGravity() {
-        return G * mass / (radius * radius);
-    }
-    double surfaceWeight(double otherMass) {
-        return otherMass * surfaceGravity();
-    }
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.err.println("Usage: java Planet <earth_weight>");
-            System.exit(-1);
+        OperatorDataSource source = new OperatorDataSource();
+        
+        for ( int i = 1 ; i<6 ; i++){
+            
+            Operator1 op = new Operator1();
+            op.setOperator("op"+i);
+            op.setMesaj_sayisi(i*10);
+            op.setNumara_sayisi(i*5);
+            op.setToplam_periyod_sure(new Double(i*4));
+            op.setToplam_sure(new Double(i*3));
+            
+            source.add(op);
         }
-        double earthWeight = Double.parseDouble(args[0]);
-        double mass = earthWeight/EARTH.surfaceGravity();
-        for (PlanetEnumTest p : PlanetEnumTest.values())
-           System.out.printf("Your weight on %s is %f%n",
-                             p, p.surfaceWeight(mass));
-    }
+        export("D:\\test.pdf", source);
+        
+ }
+        
+         private static void export(String outFileName , OperatorDataSource datasource) {
+                 JasperReport jasperReport = null ;
+		 String source_filename  = "C:\\VodafoneRaporlar\\SonucRapor.jasper";
+	
+                
+                HashMap hm = new HashMap();
+                hm.put("faturaTarih", "12-02-2012 - 13-03-2012");
+                hm.put("DataFile", "OperatorDataSource.java - Bean Array");
+                
+                try {
+                        JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(datasource.getBeanArray()));
+
+                        if(datasource!=null) 
+                        { JasperExportManager.exportReportToPdfFile(print, outFileName);  
+                          System.err.println("");
+                        }
+
+                 } catch (Exception e) {
+                            e.printStackTrace();
+                            System.err.println("Vodafone Hata"+e);
+                 } finally {
+
+                }
+            
+        }
+        
+
+    
 }

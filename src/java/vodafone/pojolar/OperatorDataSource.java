@@ -16,7 +16,7 @@ public class OperatorDataSource {
     
     ArrayList<Operator1>  data = new ArrayList<Operator1>();
 
-    public void add(Operator oper){
+    public void add(Operator1 oper){
         data.add(oper);
     }
     

@@ -5,7 +5,6 @@
 package vodafone.islemler;
 
 import java.awt.Image;
-import java.sql.SQLException;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -60,7 +59,7 @@ public class ExportPDF {
 		  this.mesaj_sayisi         = mesaj_sayisi;
 	} 
         
-        public void exportSecondReport(String outFileName) throws SQLException{
+        public void exportSecondReport(String outFileName) {
                  JasperReport jasperReport = null ;
 		 String source_filename  = "C:\\VodafoneRaporlar\\MySqlReport3.jasper";
 	
@@ -100,8 +99,7 @@ public class ExportPDF {
                       System.err.println("Vodafone Hata"+e);
                  } finally {
 
-                }
-		
+                }	
 		
         }
         
@@ -144,12 +142,12 @@ public class ExportPDF {
                 
                 HashMap hm = new HashMap();
                 hm.put("faturaTarih", tarih_araligi);
-                hm.put("DataFile", "OperatorDataSource.java - Bean Array");
+                hm.put("DataFile", new JRBeanArrayDataSource(operator_data_source.getBeanArray()));
                 
                 try {
                         JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(operator_data_source.getBeanArray()));
 
-                        if(data_source!=null) 
+                        if(operator_data_source!=null) 
                         { JasperExportManager.exportReportToPdfFile(print, outFileName);  
                           System.err.println("");
                         }
