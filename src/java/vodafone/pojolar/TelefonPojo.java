@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public class TelefonPojo {
     
+    private String unique_key = "";
     private String aranan_ismi = "";
     private String numara   = "" ;
     private String operator = "" ;
@@ -92,6 +93,14 @@ public class TelefonPojo {
 
     public void setPeriyod_sure(Double periyod_sure) {
         this.periyod_sure = periyod_sure;
+    }
+
+    public String getUnique_key() {
+        return unique_key;
+    }
+
+    public void setUnique_key(String unique_key) {
+        this.unique_key = unique_key;
     }
     
     

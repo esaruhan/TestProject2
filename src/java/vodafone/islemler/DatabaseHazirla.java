@@ -47,9 +47,9 @@ public final class DatabaseHazirla {
          
          while(it.hasNext()){
                       
-            String numara = it.next();
-
-            ArrayList<TelefonPojo>  pojolar = operator.get(numara);
+            String unique_key = it.next();
+            
+            ArrayList<TelefonPojo>  pojolar = operator.get(unique_key);
             
             DatabasePojo dataPojo 	= new DatabasePojo();
 				
@@ -81,7 +81,7 @@ public final class DatabaseHazirla {
                } 
             } // for
             dataPojo.setOrtalamaGorusme();
-            tum_pojolar.getDatabasepojo().put(numara, dataPojo);
+            tum_pojolar.getDatabasepojo().put(unique_key, dataPojo);
          }
      }
  }

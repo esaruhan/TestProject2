@@ -29,6 +29,7 @@ public class GorusmeleriDuzenle {
             
             ArrayList<String>  line = gorusmeler.get(i);
             
+            
             String tarih        = line.get(0);
             String type         = line.get(1);
             String numara       = line.get(2);
@@ -37,8 +38,11 @@ public class GorusmeleriDuzenle {
             String sure         = line.get(5);
             String tutar        = line.get(6);
             
+            
             TelefonPojo     telpojo = new TelefonPojo();
             
+            String unique_key = numara+"**"+operator;
+            telpojo.setUnique_key(unique_key);
             telpojo.setNumara(numara);
             telpojo.setOperator(operator);
             telpojo.setTutar(Utils.checkAndReturnLong(tutar));
@@ -59,66 +63,66 @@ public class GorusmeleriDuzenle {
             if(operator.equalsIgnoreCase("Vodafone")){
                 
                 
-                if(operatorler.getVodafone().containsKey(numara)){
+                if(operatorler.getVodafone().containsKey(unique_key)){
                     
-                     operatorler.getVodafone().get(numara).add(telpojo);
+                     operatorler.getVodafone().get(unique_key).add(telpojo);
                 } else{
-                      operatorler.getVodafone().put(numara,new ArrayList<TelefonPojo>() ); 
-                      operatorler.getVodafone().get(numara).add(telpojo);
+                      operatorler.getVodafone().put(unique_key,new ArrayList<TelefonPojo>() ); 
+                      operatorler.getVodafone().get(unique_key).add(telpojo);
                 }
                 
             } else if ( operator.equalsIgnoreCase("Avea")){
                 
                 
-                if(operatorler.getAvea().containsKey(numara)){
-                    
-                     operatorler.getAvea().get(numara).add(telpojo);
+                if(operatorler.getAvea().containsKey(unique_key)){
+      
+                     operatorler.getAvea().get(unique_key).add(telpojo);
                 } else{
-                      operatorler.getAvea().put(numara,new ArrayList<TelefonPojo>() ); 
-                      operatorler.getAvea().get(numara).add(telpojo);
+                      operatorler.getAvea().put(unique_key,new ArrayList<TelefonPojo>() ); 
+                      operatorler.getAvea().get(unique_key).add(telpojo);
                 }
                 
             } else if ( operator.equalsIgnoreCase("Turkcell")){
                 
                 
-                if(operatorler.getTurkcell().containsKey(numara)){
+                if(operatorler.getTurkcell().containsKey(unique_key)){
                     
-                     operatorler.getTurkcell().get(numara).add(telpojo);
+                     operatorler.getTurkcell().get(unique_key).add(telpojo);
                 } else{
-                      operatorler.getTurkcell().put(numara,new ArrayList<TelefonPojo>() ); 
-                      operatorler.getTurkcell().get(numara).add(telpojo);
+                      operatorler.getTurkcell().put(unique_key,new ArrayList<TelefonPojo>() ); 
+                      operatorler.getTurkcell().get(unique_key).add(telpojo);
                 }
                 
             } else if ( operator.equalsIgnoreCase("Turk Telekom")){
                 
-                if(operatorler.getSabithat().containsKey(numara)){
+                if(operatorler.getSabithat().containsKey(unique_key)){
                     
-                     operatorler.getSabithat().get(numara).add(telpojo);
+                     operatorler.getSabithat().get(unique_key).add(telpojo);
                 } else{
-                      operatorler.getSabithat().put(numara,new ArrayList<TelefonPojo>() ); 
-                      operatorler.getSabithat().get(numara).add(telpojo);
+                      operatorler.getSabithat().put(unique_key,new ArrayList<TelefonPojo>() ); 
+                      operatorler.getSabithat().get(unique_key).add(telpojo);
                 }
                 
-            }  else if (type.contains("nternet")||numara.equalsIgnoreCase("Internet")){
+            }  else if (type.contains("nternet")||unique_key.equalsIgnoreCase("Internet")){
                 telpojo.setOperator("Internet");
                 telpojo.setType("Internet");
                
-                if(operatorler.getInternet().containsKey(numara)){
+                if(operatorler.getInternet().containsKey(unique_key)){
                     
-                     operatorler.getInternet().get(numara).add(telpojo);
+                     operatorler.getInternet().get(unique_key).add(telpojo);
                      
                 } else{
-                      operatorler.getInternet().put(numara,new ArrayList<TelefonPojo>() ); 
-                      operatorler.getInternet().get(numara).add(telpojo);
+                      operatorler.getInternet().put(unique_key,new ArrayList<TelefonPojo>() ); 
+                      operatorler.getInternet().get(unique_key).add(telpojo);
                 }
             } else {
                 
-                if(operatorler.getDiger().containsKey(numara)){
+                if(operatorler.getDiger().containsKey(unique_key)){
                     
-                     operatorler.getDiger().get(numara).add(telpojo);
+                     operatorler.getDiger().get(unique_key).add(telpojo);
                 } else{
-                      operatorler.getDiger().put(numara,new ArrayList<TelefonPojo>() ); 
-                      operatorler.getDiger().get(numara).add(telpojo);
+                      operatorler.getDiger().put(unique_key,new ArrayList<TelefonPojo>() ); 
+                      operatorler.getDiger().get(unique_key).add(telpojo);
                 }
                 
             }

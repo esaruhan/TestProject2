@@ -28,13 +28,14 @@ public class DatabaseInsert {
         public VodafoneDataSource kaydetDatabase(){
                         
                         Iterator<String> it1 = databasePojolar.keySet().iterator();
-     
+                        
 			while(it1.hasNext()){
 				
-                                String numara = it1.next();
-
-                                DatabasePojo dpojo = databasePojolar.get(numara);
+                                String unique_key = it1.next();
                                 
+                                DatabasePojo dpojo = databasePojolar.get(unique_key);
+                                
+                                String numara                           =               dpojo.getNumara();
                                 String aranan_ismi                      =               dpojo.getAranan_ismi();
                                 String 	operator 			= 		dpojo.getOperator();
                                 int 	arama_sayisi 			= 		dpojo.getAramaSayisi();
@@ -48,9 +49,12 @@ public class DatabaseInsert {
                                 
                             System.err.println(aranan_ismi);
                             VodafonePojo vpojo = new VodafonePojo(); 
-                            if(!aranan_ismi.isEmpty())
-                            vpojo.setNumara(aranan_ismi);
-                            else   vpojo.setNumara(numara);
+                            if(!aranan_ismi.isEmpty()) {
+                                vpojo.setNumara(aranan_ismi);
+                            }
+                            else {
+                                vpojo.setNumara(numara);
+                            }
                             vpojo.setOperator(operator);
                             vpojo.setMesajSayisi(mesaj_sayisi);
                             vpojo.setAramaSayisi(arama_sayisi);
