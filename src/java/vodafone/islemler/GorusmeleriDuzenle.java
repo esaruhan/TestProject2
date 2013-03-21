@@ -23,7 +23,7 @@ public class GorusmeleriDuzenle {
         
         OperatoreGorePojo operatorler = new OperatoreGorePojo();
         
-        System.err.println("Gorusmeler Duzenleme Size:"+gorusmeler.size());
+        
         
         for(int i = 2;gorusmeler!=null & i<gorusmeler.size() ; i ++){
             

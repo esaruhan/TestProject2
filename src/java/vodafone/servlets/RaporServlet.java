@@ -41,7 +41,7 @@ public class RaporServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException   {
         response.setContentType("application/pdf;charset=UTF-8");
-       
+        String contextPath = getServletContext().getRealPath(File.separator);
         response.setCharacterEncoding("UTF8");
        
       
@@ -55,7 +55,7 @@ public class RaporServlet extends HttpServlet {
                 DiskFileItemFactory factory = new DiskFileItemFactory();
                 // Set factory constraints
                 factory.setSizeThreshold(200058);
-                factory.setRepository(new File("C:\\VodafoneRaporlar"));
+                factory.setRepository(new File(contextPath+"VodafoneRaporlar"));
                 // Create a new file upload handler
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 // Set overall request size constraint
@@ -78,9 +78,9 @@ public class RaporServlet extends HttpServlet {
 //                long sizeInBytes = item.getSize();
 //            }
             Random rnd = new Random();
-            File uploadedFile = new File("C:\\VodafoneRaporlar\\test"+rnd.nextInt(100)+".xls");
+            File uploadedFile = new File(contextPath+"VodafoneRaporlar/test"+rnd.nextInt(1000)+".xls");
             item.write(uploadedFile);
-            String contextPath = getServletContext().getRealPath(File.separator);
+            
             NewClass myclass    = new NewClass(uploadedFile.getAbsolutePath(),contextPath);      
                outputPath = myclass.outputPath();
                

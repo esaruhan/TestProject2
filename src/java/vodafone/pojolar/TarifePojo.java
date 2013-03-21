@@ -8,7 +8,7 @@ package vodafone.pojolar;
  *
  * @author LifeBook
  */
-public class TarifePojo {
+public class TarifePojo implements Comparable<TarifePojo> {
     
     private String   tarife_ismi     =  "";
     private String   tarife_grubu    = "";
@@ -128,9 +128,10 @@ public class TarifePojo {
     public void setFiyat(Integer fiyat) {
         this.fiyat = fiyat;
     }
-    
-    
-    
-    
-    
+
+    @Override
+    public int compareTo(TarifePojo o) {
+        return this.fiyat - o.fiyat;
+    }
+        
 }

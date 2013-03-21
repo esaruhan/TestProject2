@@ -19,8 +19,10 @@ import vodafone.islemler.ExportPDF;
 import vodafone.islemler.GorusmeleriDuzenle;
 import vodafone.islemler.MergePDF;
 import vodafone.islemler.PieChartPrepare;
+import vodafone.islemler.TarifeOner;
 import vodafone.pojolar.OperatorDataSource;
 import vodafone.pojolar.OperatoreGorePojo;
+import vodafone.pojolar.TarifeOnerPojo;
 import vodafone.pojolar.VodafoneDataSource;
 import vodafone.tarife_oner_islemler.Singleton;
 
@@ -41,7 +43,7 @@ public class NewClass {
             DosyadanOkuma dokuma = new DosyadanOkuma();
 
             gorusmeler = dokuma.dosyaOkuFromFile(fileName);
-            
+            System.err.println(contextPath);
             Singleton.getInstance().setContextPath(contextPath);
             
             if (gorusmeler != null && !gorusmeler.isEmpty() & gorusmeler.size() > 5) {
@@ -73,8 +75,9 @@ public class NewClass {
                  OperatorDataSource source = new OperatorDataSource();
                                     source.setData(opgore.getOperatorler_rapor());
                 
-                
-                
+                TarifeOnerPojo toner_pojo = prepare.getTarifeOnerPojo();
+                TarifeOner     toner = new TarifeOner(toner_pojo);
+                               
                 int toplam_kisi_no = prepare.getToplamNumara();
                 System.err.println("kisi toplam"+toplam_kisi_no);
                 //Raporları Çıkartabilirsinizin
@@ -99,13 +102,15 @@ public class NewClass {
                     export.exportThirdReport(thirdReportOut);
                     List<InputStream> pdfs = new ArrayList<InputStream>();
                     pdfs.add(new FileInputStream(firstReportOut));
-                    pdfs.add(new FileInputStream(secondReportOut));
                     pdfs.add(new FileInputStream(thirdReportOut));
+                    pdfs.add(new FileInputStream(secondReportOut));
                     OutputStream output = new FileOutputStream(outputPath);
                     MergePDF.concatPDFs(pdfs, output, true);
 
                 } catch (Exception ex) {
                     Logger.getLogger(NewClass.class.getName()).log(Level.SEVERE, null, ex);
+                }finally{
+                   
                 }
             }   
         } catch (Exception ex) {

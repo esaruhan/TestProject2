@@ -101,6 +101,9 @@ public class MergePDF {
                     streamOfPDFFiles.get(0).close();
                 if(streamOfPDFFiles.get(1)!=null)
                     streamOfPDFFiles.get(1).close();
+                 if(streamOfPDFFiles.get(2)!=null)
+                    streamOfPDFFiles.get(2).close();
+                
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }

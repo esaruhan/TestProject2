@@ -24,6 +24,7 @@ import org.jfree.util.Rotation;
 import vodafone.pojolar.Operator;
 import vodafone.pojolar.Operator1;
 import vodafone.pojolar.OperatoreGorePojo;
+import vodafone.pojolar.TarifeOnerPojo;
 import vodafone.pojolar.TelefonPojo;
 
 public class PieChartPrepare {
@@ -36,7 +37,7 @@ public class PieChartPrepare {
 	 */
    
 	private OperatoreGorePojo opgore = null ;
-	
+	private TarifeOnerPojo toner = new TarifeOnerPojo();
         private HashMap<String, Operator> operatorler = new HashMap<String,Operator>();
         private HashMap<String, Operator1> operatorler1 = new HashMap<String,Operator1>();
        
@@ -50,7 +51,6 @@ public class PieChartPrepare {
 	Double toplamSure = 0.0 ;
 	Double toplamMesajUcret = 0.0 ;
 	Double toplamAramaUcret = 0.0 ;
-	
         Double toplamPeriyodSure = 0.0;
         
 	Operator turkcel = null ;
@@ -89,6 +89,17 @@ public class PieChartPrepare {
                  calculateTotals(diger,"Diğer Operatorler");         
                 
                  opgore.setOperatorler_rapor(new ArrayList<Operator1>(operatorler1.values()));
+                 
+                 
+                 toner.setAramaSayisi(aramaSayisi);
+                 toner.setMesajSayisi(mesajSayisi);
+                 toner.setOperatorler(operatorler);
+                 toner.setToplamAramaUcret(toplamAramaUcret);
+                 toner.setToplamMesajUcret(toplamMesajUcret);
+                 toner.setToplamNumara(toplamNumara);
+                 toner.setToplamPeriyodSure(toplamPeriyodSure);
+                 toner.setToplamSure(toplamSure);
+                 toner.setToplam_gorusme(toplam_gorusme);
                  
 	}
 	public void createPirCharsAll() throws Exception{
@@ -385,7 +396,7 @@ public Double calculatePeriyodSure(Double sure,String numara){
      Double kalan = sure %6;
      kalan = kalan == 0?6:kalan;
      Double periyod_sure = sure + (6-kalan);
-//     System.err.print(numara+" Gelen Sure: "+sure +"   Hesaplanan  :      "+periyod_sure);
+
      return periyod_sure;   
  }
 
@@ -475,7 +486,9 @@ public Double calculatePeriyodSure(Double sure,String numara){
     public HashMap<String, Operator> getOperatorler() {
         return operatorler;
     }
-
+    public TarifeOnerPojo getTarifeOnerPojo() {
+        return toner;
+    }
     public void setOperatorler(HashMap<String, Operator> operatorler) {
         this.operatorler = operatorler;
     }

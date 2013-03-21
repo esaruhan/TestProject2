@@ -20,7 +20,7 @@ import vodafone.pojolar.TarifePojo;
 public class TarifeOku {
     
    private  ArrayList<TarifePojo> tarifeler = new ArrayList<TarifePojo>();
-    String tarifeDosyasi = "C:\\VodafoneRaporlar\\Vodafone Tarifeler_YENI.csv";
+    String tarifeDosyasi = Singleton.getInstance().getContextPath()+"VodafoneRaporlar/Vodafone Tarifeler_YENI.csv";
     BufferedReader rd = null ;
     public TarifeOku() {
 

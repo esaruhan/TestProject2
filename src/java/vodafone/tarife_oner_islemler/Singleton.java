@@ -12,15 +12,18 @@ import vodafone.pojolar.TarifePojo;
  * @author LifeBook
  */
 public class Singleton {
-    private static Singleton instance = new Singleton();
-    private  ArrayList<TarifePojo> tarifeler = new ArrayList<TarifePojo>();
-    private  static String  contextPath  = "";
+    private  static Singleton               instance     = new Singleton();
+    private         ArrayList<TarifePojo>   tarifeler    = new ArrayList<TarifePojo>();
+    private  static String                  contextPath  = "" ;
     
     private Singleton(){           
-             TarifeOku oku = new TarifeOku();
-             tarifeler = oku.readTarifeler();   
+         
     }
     
+    public void tarifeOku(){
+            TarifeOku oku = new TarifeOku();
+            tarifeler = oku.readTarifeler();
+    }
     public static Singleton getInstance() {
         return instance;
     }
@@ -33,14 +36,14 @@ public class Singleton {
         this.tarifeler = tarifeler;
     }
 
-    public static String getContextPath() {
+    public  String getContextPath() {
         return contextPath;
     }
 
-    public static void setContextPath(String contextPath) {
+    public  void setContextPath(String contextPath) {
         Singleton.contextPath = contextPath;
+        TarifeOku oku = new TarifeOku();
+        tarifeler = oku.readTarifeler();
     }
-    
-    
-    
+        
 }
