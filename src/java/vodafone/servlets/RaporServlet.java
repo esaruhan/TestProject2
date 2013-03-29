@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import vodafone.main.NewClass;
+import vodafone.tarife_oner_islemler.Singleton;
 
 /**
  *
@@ -26,8 +27,8 @@ import vodafone.main.NewClass;
  */
 public class RaporServlet extends HttpServlet {
     
-     FileItem item = null;
-        String   outputPath = "";
+        FileItem  item       = null;
+        String    outputPath = "";
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -41,13 +42,17 @@ public class RaporServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException   {
         response.setContentType("application/pdf;charset=UTF-8");
-        String contextPath = getServletContext().getRealPath(File.separator);
+      //  String contextPath = getServletContext().getRealPath(File.separator);
+       	String contextPath = System.getProperty("user.home");
+   
+         //String contextPath = "/var/zpanel/hostdata/esaruhan/tarifeoner_com";
+              Singleton.getInstance().setContextPath(contextPath);
         response.setCharacterEncoding("UTF8");
-       
-      
+        String test = "contextPath:"+contextPath+"***"+System.getProperty("user.dir")+"**";
+        ServletOutputStream sos = response.getOutputStream();
         try {
             
-            ServletOutputStream sos = response.getOutputStream();
+            
             /* TODO output your page here. You may use following sample code. */
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             // Create a factory for disk-based file items
@@ -55,17 +60,19 @@ public class RaporServlet extends HttpServlet {
                 DiskFileItemFactory factory = new DiskFileItemFactory();
                 // Set factory constraints
                 factory.setSizeThreshold(200058);
-                factory.setRepository(new File(contextPath+"VodafoneRaporlar"));
+                factory.setRepository(new File(contextPath+"/VodafoneRaporlar"));
+                test +="path:"+ contextPath+"VodafoneRaporlar";
                 // Create a new file upload handler
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 // Set overall request size constraint
-                upload.setSizeMax(200058);
+                upload.setSizeMax(1024*1024);
+                upload.setFileSizeMax(1024*1024);
                 List /* FileItem */ items = upload.parseRequest(request);
                 
                 Iterator iter = items.iterator();
                 if (iter.hasNext()) {
                     item = (FileItem) iter.next();
-
+                    
                 }
             }
 
@@ -77,14 +84,25 @@ public class RaporServlet extends HttpServlet {
 //                boolean isInMemory = item.isInMemory();         
 //                long sizeInBytes = item.getSize();
 //            }
-            Random rnd = new Random();
-            File uploadedFile = new File(contextPath+"VodafoneRaporlar/test"+rnd.nextInt(1000)+".xls");
-            item.write(uploadedFile);
-            
-            NewClass myclass    = new NewClass(uploadedFile.getAbsolutePath(),contextPath);      
+//                  
+            if(item!=null){
+                Random rnd = new Random();
+                   test += "yazmadan önce";
+               File uploadedFile = new File(contextPath+"/VodafoneRaporlar/test"+rnd.nextInt(1000)+".xls");
+               if(uploadedFile.exists())
+                   test += "  file exist " ;
+               else  test += "  file not exist " ;
+               if(uploadedFile.exists())
+                   test += "  file exist " ;
+               else  test += "  file exist " ;
+               test += "yazmadan sonra";
+               item.write(uploadedFile);
+                  test += "yazdımı acaba";
+               test += "absolute path:"+uploadedFile.getAbsolutePath();
+               NewClass myclass    = new NewClass(uploadedFile.getAbsolutePath(),contextPath);      
                outputPath = myclass.outputPath();
                
-               
+                test += "output path:"+outputPath;
 		
 		File pdfFile = new File(outputPath);
 
@@ -100,12 +118,26 @@ public class RaporServlet extends HttpServlet {
 		}         
                 sos.flush();
                 fileInputStream.close();
-                sos.close();
+                
+            } else {
+                sos.println("");
+            }
+               
+               
         } catch(Exception ex) {
-            
+                response.setContentType("text/html");
+               sos.println(ex.toString());
+               sos.println(test);
+                
         }finally {            
-           
-            
+           outputPath = "";
+           File output = new File(outputPath);
+           if(output!=null&&output.exists()){
+               output.delete();
+           }
+            item = null;
+             if(sos!=null)
+                    sos.close();
         }
     }
 

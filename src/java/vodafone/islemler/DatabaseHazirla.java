@@ -78,6 +78,7 @@ public final class DatabaseHazirla {
                    dataPojo.incrementToplamAramaUcret(telPojo.getTutar());
                    dataPojo.incrementToplamMiktar(telPojo.getSure());
                    dataPojo.incrementToplamDakika(telPojo.getSure());
+                
                } 
             } // for
             dataPojo.setOrtalamaGorusme();

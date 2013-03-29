@@ -56,7 +56,7 @@ public class DosyadanOkuma {
             }
 
         } catch (Exception ex) {    
-             LogFile.insertLog("DosyadanOkuma.dosyaOkuFromString"+"  -->Exception ==>"+ex.toString(), Level.WARNING);
+            System.err.println("DosyadanOkuma:"+ex.toString());
         }
 
         return gorusmeler;
@@ -92,8 +92,7 @@ public class DosyadanOkuma {
             }   
         return gorusmeler;
         } catch (IOException ex) {
-            Logger.getLogger(DosyadanOkuma.class.getName()).log(Level.SEVERE, null, ex);
-            LogFile.insertLog("DosyadanOkuma.dosyaOkuFromFile"+"  -->Exception ==>"+ex.toString(), Level.WARNING);      
+            System.err.println(ex.toString());
             return null;
         }
        

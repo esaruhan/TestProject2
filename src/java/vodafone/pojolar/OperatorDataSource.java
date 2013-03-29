@@ -22,13 +22,13 @@ public class OperatorDataSource {
     
     public void setData(ArrayList<Operator1>  data){
         this.data = data;
-        for(int i = 0 ; i< data.size() ; i++){
-            System.err.println(data.get(i).getOperator());
-          
-           System.err.println(data.get(i).getMesaj_sayisi());
+
+    }
+    public void clearData(){
+        if(this.data!=null){
+            data.clear();
         }
     }
-    
     public  Object[] getBeanArray()
     {
             return data.toArray();

@@ -53,12 +53,13 @@ public class PieChartPrepare {
 	Double toplamAramaUcret = 0.0 ;
         Double toplamPeriyodSure = 0.0;
         
-	Operator turkcel = null ;
-	Operator vodafone = null ;
-	Operator avea = null ;
-	Operator sabithat = null ;
-	Operator diger = null ;
-	
+	Operator turkcel    = null ;
+	Operator vodafone   = null ;
+	Operator avea       = null ;
+	Operator sabithat   = null ;
+	Operator diger      = null ;
+	Operator internet   = null;
+        
         public  Image sure_bazli_img;
         public  Image numara_sayisina_gore;
         public  Image arama_ucret;
@@ -80,7 +81,6 @@ public class PieChartPrepare {
 		 sabithat    = degerHesapla(opgore.getSabithat(), "SABIT");
 		 diger 	     = degerHesapla(opgore.getDiger(),"Diğer/Yurtdışı");
 		
-                 System.err.println("Toplam Gorusme"+toplam_gorusme);
                 
                  calculateTotals(turkcel,"Turkcell");
                  calculateTotals(vodafone,"Vodafone");
@@ -163,8 +163,6 @@ public class PieChartPrepare {
 		
 		return mesaj_ucret ;
 	}
-        
- 
 	public Image createPieChart_Arama_UcreteGore(){
 		
 		Double calculate_total_aranan = (double)(turkcel.getArama_ucret() + avea.getArama_ucret() + vodafone.getArama_ucret() + sabithat.getArama_ucret() + diger.getArama_ucret());

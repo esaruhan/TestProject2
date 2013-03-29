@@ -7,11 +7,14 @@ package vodafone.islemler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import javax.sound.midi.Soundbank;
+import vodafone.pojolar.DatabasePojo;
 import vodafone.pojolar.Operator;
+import vodafone.pojolar.SMS;
 import vodafone.pojolar.TarifeOnerPojo;
 import vodafone.pojolar.TarifePojo;
 import vodafone.tarife_oner_islemler.Singleton;
+import vodafone.tarife_oner_islemler.TarifeData;
+import vodafone.tarife_oner_islemler.TarifeDataSource;
 import vodafone.tarife_oner_islemler.tarife_oner_compare;
 
 /**
@@ -19,17 +22,20 @@ import vodafone.tarife_oner_islemler.tarife_oner_compare;
  * @author LifeBook
  */
 public class TarifeOner {
-    
-    private  ArrayList<TarifePojo> tarifeler = new ArrayList<TarifePojo>();
-    private  TarifeOnerPojo        toner     = null;
-     private HashMap<String, Operator> operatorler = new HashMap<String,Operator>();
+  
+    private  ArrayList<TarifePojo>      tarifeler   = new ArrayList<TarifePojo>();
+    private  TarifeOnerPojo             toner       = null;
+    private  HashMap<String, Operator>  operatorler = new HashMap<String,Operator>();
      
+    private ArrayList<tarife_oner_compare>        filtreleme = new ArrayList<tarife_oner_compare>();
+    private  TarifeDataSource  tarife_data   = new TarifeDataSource();
     private  Operator  vodafone  ;
     private  Operator  turkcell  ;
     private  Operator  avea      ;
     private  Operator  sabit     ;
     private  Operator  diger     ;
     
+    DatabasePojo internet ;
             
         int     toplam_gorusme = 0 ;       
 	int     aramaSayisi = 0;
@@ -42,7 +48,7 @@ public class TarifeOner {
     
         
         
-    public  TarifeOner(TarifeOnerPojo ptoner) {        
+    public  TarifeOner(TarifeOnerPojo ptoner,DatabasePojo internet) {        
          this.toner = ptoner;                 
          toplam_gorusme = toner.getToplam_gorusme();
 	 aramaSayisi = toner.getAramaSayisi();
@@ -55,31 +61,123 @@ public class TarifeOner {
         
          
          operatorler = toner.getOperatorler();
-         
+         this.internet = internet;
+
          vodafone = operatorler.get("Vodafone");
          turkcell = operatorler.get("Turkcell");
          avea     = operatorler.get("Avea");
          sabit    = operatorler.get("SabitHat");
          diger    = operatorler.get("Diğer Operatorler");
          
-         tarifeler = Singleton.getInstance().getTarifeler();
+        tarifeler = Singleton.getInstance().getTarifeler();
+        
+//        System.err.println("Ücret:"+internet.getToplamAramaUcret());
+//        System.err.println("Miktar:"+internet.getToplamMiktar());
          
-         Collections.sort(tarifeler);
-         tarifeOner();
-         System.out.println("tarifeler size"+tarifeler.size());
+         tarifeKonusmaFiltrele();
+         if(mesajSayisi>0)
+             tarifeMesajFiltrele();
+         
+         Collections.sort(filtreleme);  
+         raporIcinHazirla();
+         
+//         System.err.println("-----------------------------------------------------------------------------------------------------");
+//        for(int j = 0 ; j<filtreleme.size() ; j++){
+//            tarife_oner_compare oner = filtreleme.get(j);
+//            System.err.println("-----------------------------------------------");
+//            System.err.println(oner.getTarife_ismi()+"            fiyat-->"+oner.getToplam_fiyat());
+//        }
+//
+//         System.out.println("tarifeler size"+tarifeler.size());
+    }
+    
+    public void raporIcinHazirla(){
+        for(int i = 0 ; i< filtreleme.size() ; i++){
+             tarife_oner_compare toner = filtreleme.get(i);
+             TarifePojo tpojo = toner.getPojo();
+             
+             TarifeData tarife = new TarifeData();
+             if(tpojo.isIsKontratVar()||tpojo.isKalmaSozu()){
+                   tarife.setKontrat(""+tpojo.getKontrat_suresi()+"AY");                 
+             } else {
+                   tarife.setKontrat("-----");
+             }
+             tarife.setTarifeismi(toner.getTarife_ismi());
+             tarife.setMesajpaket(toner.getMesaj_paket_ismi());
+             tarife.setMesajpaketfiyat(toner.getMesaj_fiyat()+"");
+             tarife.setTarifefiyat(toner.getKonusma_fiyat()+"");
+             tarife.setToplamfiyat(toner.getToplam_fiyat()+"");
+             tarife.setTarifegrub(tpojo.getTarife_grubu());
+             
+             tarife_data.add(tarife);
+           
+        }
+        
     }
         
+    public void tarifeMesajFiltrele(){
+          ArrayList<SMS>   mesaj_paketleri  = Singleton.getInstance().getMesaj_paketleri();
+          int mesaj_paket = uygunMesajPaketiBul();
+          SMS sms = mesaj_paketleri.get(mesaj_paket);
+          int mesaj_fiyat = sms.getFiyat();
+          String paket_ismi = sms.getPaket_adi();
+          System.err.println("Mesaj Paket:"+mesaj_paket + " Ad : "+paket_ismi +"  fiyat :"+mesaj_fiyat);
+          for(int i = 0 ; i< filtreleme.size() ; i++){
+                tarife_oner_compare toner = filtreleme.get(i);
+                
+                boolean konusma         = toner.isKonusma();
+                boolean konusma_mesaj  = toner.isKonusma_mesaj();
+                boolean mesaj          = toner.isMesaj();
+                
+                if(!konusma_mesaj){
+                    toner.setMesaj_fiyat(mesaj_fiyat);
+                    toner.setMesaj_paket_ismi(paket_ismi);
+                    toner.setToplam_fiyat();
+                } else {
+                    toner.setMesaj_fiyat(0);
+                    toner.setToplam_fiyat();
+                }
+              
+          }
+    }
     
+    public int uygunMesajPaketiBul(){
+//         ArrayList<SMS>   mesaj_paketleri  = Singleton.getInstance().getMesaj_paketleri();
+        
+         int kullanilan_mesaj = mesajSayisi;  //100 - 0  
+         int vodafone_kullanilan_mesaj = vodafone.getMesaj_sayisi(); // 10 - 45
+         int heryone_kullanilan_mesaj = 0;
+         
+         if(kullanilan_mesaj>0) {
+            heryone_kullanilan_mesaj  = kullanilan_mesaj - vodafone_kullanilan_mesaj;
+        }
+         else {
+            heryone_kullanilan_mesaj = vodafone_kullanilan_mesaj;
+        }
+         
+        if(kullanilan_mesaj>500){
+            if(heryone_kullanilan_mesaj==0&vodafone_kullanilan_mesaj<5000){
+                return 3;
+            } else {
+                return 1;
+            }         
+        } else {
+            
+            if(kullanilan_mesaj>25&kullanilan_mesaj<100){
+                return 0 ;
+            } else if(kullanilan_mesaj<26) {
+                return 4;
+            } else {
+                return 2;
+            }
+            
+        }
+    }
     
-    
-    public void tarifeOner(){
-        
-        ArrayList<tarife_oner_compare>  ilk_eleme = new ArrayList<tarife_oner_compare>();
-        
-        Double puan = 0.0;
-        
+    public void tarifeKonusmaFiltrele(){
+             
         for(int i = 0 ; i< tarifeler.size() ; i++){
-            puan = 0.0;
+           
             TarifePojo  tpojo = tarifeler.get(i);
             
             Double  periyod_sure_dk   = toplamPeriyodSure/60;
@@ -90,87 +188,52 @@ public class TarifeOner {
             Integer tarife_mesaj_heryone    = tpojo.getHer_yone_sms();
             Integer tarife_mesaj_vodafone   = tpojo.getVodafone_sms();
              
-            Double puan1 = 0.0 ;
-            Double puan2 = 0.0 ;
-            Double puan3 = 0.0 ;
+          
+            boolean control_heryone = false;
+            boolean control_vodafone = false;
+            boolean control_heryone1 = false;
             
-            Double puan11 = 0.0 ;
-            Double puan22 = 0.0 ;
-            Double puan33 = 0.0 ;
-            Double puan_ortalama23 = 0.0;
+            boolean message_heryone = false;
+            boolean message_vodafone = false;
+            boolean message_heryone1 = false;
             
-            Double puan_ortalama = 0.0;
-            
+            boolean konusma = false;
+            boolean mesaj   = false;
+            boolean konusma_mesaj = false;
+           
             if(periyod_sure_dk < tarife_heryone){               
-                puan1 = puan1 + (periyod_sure_dk/tarife_heryone) * 100 ;                
-            } else {
-               Double puan12 = ((periyod_sure_dk - tarife_heryone) / periyod_sure_dk ) * 100;
-               puan11 = 100 - puan12;     
-            }     
+                control_heryone = true;         
+            }      
             if(vodafone_dakika < tarife_vodafone ){
-                puan2 = puan2 + (vodafone_dakika/tarife_vodafone) * 100;
-            } else {
-               Double puan12 = ((vodafone_dakika - tarife_vodafone) / vodafone_dakika ) * 100;
-               puan22 = 100 - puan12;
-            }
-            if(periyod_sure_dk-vodafone_dakika < tarife_heryone){               
-                puan3 = puan3 + ((periyod_sure_dk-vodafone_dakika)/tarife_heryone) * 100;                
+               control_vodafone = true;
             } 
-            else {
-               Double puan12 = (((periyod_sure_dk-vodafone_dakika) - tarife_heryone) / (periyod_sure_dk-vodafone_dakika)  ) * 100;
-               puan33 = 100 - puan12;
-            }
-            
-            
-            puan_ortalama = (puan2 + puan3) / 2;      
-            if(puan1>puan_ortalama) puan_ortalama = puan1;
-
-            puan_ortalama23 = (puan22 + puan33) / 2; 
-            if(puan11>puan_ortalama23) puan_ortalama23 = puan11;
-            
-            
-            Double mesaj_puan1 = 0.0;
-            Double mesaj_puan2 = 0.0;
-            Double mesaj_puan3 = 0.0;
-            
-            Double mesaj_ortalama = 0.0;
-            if(tarife_mesaj_heryone> mesajSayisi && tarife_mesaj_heryone > 0) {
-                mesaj_puan1 = (( new Double(mesajSayisi) / tarife_mesaj_heryone) * 100 ) * 0.40;
+            if(periyod_sure_dk-vodafone_dakika < tarife_heryone){               
+               control_heryone1  = true;     
+            } 
+           
+            if(tarife_mesaj_heryone >= mesajSayisi && tarife_mesaj_heryone > 0) {
+                message_heryone = true;
             }
             
             if(tarife_mesaj_vodafone> vodafone.getMesaj_sayisi() &&tarife_mesaj_vodafone > 0){
-                mesaj_puan2 = (( new Double(vodafone.getMesaj_sayisi()) / tarife_mesaj_vodafone) * 100 ) * 0.40;
+                message_vodafone = true;
             }
             
             if(tarife_mesaj_heryone> mesajSayisi - vodafone.getMesaj_sayisi() &&tarife_mesaj_heryone > 0){
-                mesaj_puan3 = (( new Double(mesajSayisi - vodafone.getMesaj_sayisi()) / tarife_mesaj_heryone) * 100 ) * 0.40;
+                message_heryone1  = true;
             }
-       
-            mesaj_ortalama = (mesaj_puan2+ mesaj_puan3) / 2;
-            if(mesaj_puan1>mesaj_ortalama) mesaj_ortalama = mesaj_puan1;
-         
-            puan_ortalama += mesaj_ortalama ;
             
-            System.err.println(tpojo.getTarife_ismi() +" --> puan_ortalam-->"+puan_ortalama+" puan1->"+puan1+" puan2->" +puan2+" puan3->"+puan3 +" mesaj_puan->"+mesaj_ortalama +" puan_ortalam23-->"+puan_ortalama23);
-            
-            tarife_oner_compare oner = new tarife_oner_compare(tpojo.getFiyat(), puan_ortalama, tpojo, tpojo.getTarife_ismi());
-            ilk_eleme.add(oner);
-            
-            
+            mesaj = message_heryone ||(message_vodafone&&message_heryone1);
+            konusma = control_heryone || (control_vodafone&&control_heryone1);
+            konusma_mesaj = konusma && mesaj ;
+           
+            if(konusma || konusma_mesaj){
+                tarife_oner_compare oner = new tarife_oner_compare(tpojo.getFiyat(), konusma,mesaj,konusma_mesaj, tpojo, tpojo.getTarife_ismi());
+                oner.setToplam_fiyat();
+                filtreleme.add(oner);
+            }   
 ////            if(mesajSayisi)
-        }
-        
-        
-        
-        Collections.sort(ilk_eleme);
-        System.err.println("-----------------------------------------------------------------------------------------------------");
-        for(int j = 0 ; j<ilk_eleme.size() ; j++){
-            tarife_oner_compare oner = ilk_eleme.get(j);
-            System.err.println("-----------------------------------------------");
-            System.err.println(oner.getTarife_ismi()+"  puan-->"+oner.getPuan() +" fiyat-->"+oner.getFiyat());
-        }
-        
-        
+        }   
         
     }    
        
@@ -182,6 +245,14 @@ public class TarifeOner {
 
     public void setTarifeler(ArrayList<TarifePojo> tarifeler) {
         this.tarifeler = tarifeler;
+    }
+
+    public TarifeDataSource getTarife_data() {
+        return tarife_data;
+    }
+
+    public void setTarife_data(TarifeDataSource tarife_data) {
+        this.tarife_data = tarife_data;
     }
 
 

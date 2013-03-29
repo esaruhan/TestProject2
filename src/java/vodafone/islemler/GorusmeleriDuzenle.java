@@ -93,7 +93,7 @@ public class GorusmeleriDuzenle {
                       operatorler.getTurkcell().get(unique_key).add(telpojo);
                 }
                 
-            } else if ( operator.equalsIgnoreCase("Turk Telekom")){
+            } else if ( operator.equalsIgnoreCase("Turk Telekom")||operator.equalsIgnoreCase("Tellcom İletişim")){
                 
                 if(operatorler.getSabithat().containsKey(unique_key)){
                     

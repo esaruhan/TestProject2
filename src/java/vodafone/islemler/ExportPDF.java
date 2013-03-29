@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import vodafone.pojolar.OperatorDataSource;
 import vodafone.pojolar.VodafoneDataSource;
 import vodafone.tarife_oner_islemler.Singleton;
+import vodafone.tarife_oner_islemler.TarifeDataSource;
 /**
  *
  * @author LifeBook
@@ -25,8 +26,9 @@ public class ExportPDF {
          
          String tarih_araligi = "";
          String abone_numara  ="";
-         VodafoneDataSource  data_source = new VodafoneDataSource();
-         OperatorDataSource  operator_data_source = new OperatorDataSource();
+         VodafoneDataSource                 data_source = new VodafoneDataSource();
+         OperatorDataSource        operator_data_source = new OperatorDataSource();
+         TarifeDataSource          tarife_data_source   = new TarifeDataSource();
          
          Image sure_bazli_img;
 	 Image numara_sayisina_gore;
@@ -62,7 +64,7 @@ public class ExportPDF {
         
         public void exportSecondReport(String outFileName) {
                  JasperReport jasperReport = null ;
-		 String source_filename  = Singleton.getInstance().getContextPath()+"VodafoneRaporlar/MySqlReport3.jasper";
+		 String source_filename  = Singleton.getInstance().getContextPath()+"/VodafoneRaporlar/MySqlReport3.jasper";
                  
 		
 		java.net.URL leaf = this.getClass().getResource("resource/leaf_banner_green.png");
@@ -105,7 +107,7 @@ public class ExportPDF {
         }
         
         public void exportFirstReport(String outFileName) throws Exception {
-                String filename      = Singleton.getInstance().getContextPath()+"VodafoneRaporlar/FirstPage.jasper";
+                String filename      = Singleton.getInstance().getContextPath()+"/VodafoneRaporlar/FirstPage.jasper";
                 java.net.URL analiz_rapor = this.getClass().getResource("resource/analiz-rapor-4.jpg");
                 ImageIcon  icon = new ImageIcon(analiz_rapor);
 		Image analiz_raporImg = icon.getImage();
@@ -138,13 +140,13 @@ public class ExportPDF {
 
         public void exportThirdReport(String outFileName) throws Exception {
                  JasperReport jasperReport = null ;
-		 String source_filename  = Singleton.getInstance().getContextPath()+"VodafoneRaporlar/SonucRapor.jasper";
+		 String source_filename  = Singleton.getInstance().getContextPath()+"/VodafoneRaporlar/SonucRapor.jasper";
 	
                 
                 HashMap hm = new HashMap();
                 hm.put("faturaTarih", tarih_araligi);
                 hm.put("DataFile", new JRBeanArrayDataSource(operator_data_source.getBeanArray()));
-                
+                hm.put("tarifeOner", new JRBeanArrayDataSource(tarife_data_source.getBeanArray()));
                 try {
                         JasperPrint print =    JasperFillManager.fillReport(source_filename, hm, new JRBeanArrayDataSource(operator_data_source.getBeanArray()));
 
@@ -175,6 +177,14 @@ public class ExportPDF {
 
     public void setOperator_data_source(OperatorDataSource operator_data_source) {
         this.operator_data_source = operator_data_source;
+    }
+
+    public TarifeDataSource getTarife_data_source() {
+        return tarife_data_source;
+    }
+
+    public void setTarife_data_source(TarifeDataSource tarife_data_source) {
+        this.tarife_data_source = tarife_data_source;
     }
 
         

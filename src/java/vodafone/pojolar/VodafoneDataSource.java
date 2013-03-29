@@ -12,23 +12,25 @@ import java.util.Collection;
  *
  * @author LifeBook
  */
-public class VodafoneDataSource  {
+public class VodafoneDataSource {
 
+    ArrayList<VodafonePojo> data = new ArrayList<VodafonePojo>();
 
-ArrayList<VodafonePojo>  data = new ArrayList<VodafonePojo>();
+    public void add(VodafonePojo vpojo) {
+        data.add(vpojo);
+    }
 
-public void add(VodafonePojo vpojo){
-    data.add(vpojo);
-}
-  
-public  Object[] getBeanArray()
-{
+    public Object[] getBeanArray() {
         return data.toArray();
-}
-public  Collection getBeanCollection()
-{   
+    }
+
+    public Collection getBeanCollection() {
         return Arrays.asList(data);
-}
-    
-    
+    }
+
+    public void clearData() {
+        if (this.data != null) {
+            data.clear();
+        }
+    }
 }

@@ -47,7 +47,7 @@ public class DatabaseInsert {
                                 double internet_miktar     		= 		dpojo.getToplamMiktar();
                                 
                                 
-                            System.err.println(aranan_ismi);
+                           System.err.println(numara+" ->"+internet_miktar+" ->"+toplam_arama_dakika);
                             VodafonePojo vpojo = new VodafonePojo(); 
                             if(!aranan_ismi.isEmpty()) {
                                 vpojo.setNumara(aranan_ismi);
@@ -72,8 +72,5 @@ public class DatabaseInsert {
     public VodafoneDataSource getData_source() {
         return data_source;
     }
-        
-        
-        
-    
+   
 }

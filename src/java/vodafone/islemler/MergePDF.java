@@ -17,18 +17,6 @@ import java.util.List;
  
 public class MergePDF {
  
-    public static void main(String[] args) {
-        try {
-            List<InputStream> pdfs = new ArrayList<InputStream>();
-            pdfs.add(new FileInputStream("c:\\1.pdf"));
-            pdfs.add(new FileInputStream("c:\\2.pdf"));
-            OutputStream output = new FileOutputStream("c:\\merge.pdf");
-            MergePDF.concatPDFs(pdfs, output, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
- 
     public static void concatPDFs(List<InputStream> streamOfPDFFiles,
             OutputStream outputStream, boolean paginate) {
  
@@ -104,6 +92,9 @@ public class MergePDF {
                  if(streamOfPDFFiles.get(2)!=null)
                     streamOfPDFFiles.get(2).close();
                 
+                 if(streamOfPDFFiles!=null){
+                     streamOfPDFFiles.clear();
+                 }
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
