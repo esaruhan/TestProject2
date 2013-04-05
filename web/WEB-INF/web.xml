@@ -8,6 +8,10 @@
         <servlet-name>CountServlet</servlet-name>
         <servlet-class>vodafone.servlets.CountServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ToplamAnaliz</servlet-name>
+        <servlet-class>vodafone.servlets.ToplamAnaliz</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RaporServlet</servlet-name>
         <url-pattern>/RaporServlet</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>CountServlet</servlet-name>
         <url-pattern>/CountServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ToplamAnaliz</servlet-name>
+        <url-pattern>/ToplamAnaliz</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -6,19 +6,17 @@ package vodafone.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import vodafone.pojolar.TarifePojo;
 import vodafone.tarife_oner_islemler.Singleton;
 
 /**
  *
  * @author LifeBook
  */
-public class CountServlet extends HttpServlet {
+public class ToplamAnaliz extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -32,18 +30,13 @@ public class CountServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
-           
-           
-           ArrayList<TarifePojo> list = Singleton.getInstance().getTarifeler();
-           out.println(list.size());
-           for(int i = 0 ; i<list.size() ; i++){
-               
-           }
-           
+                Integer toplamAnaliz = Singleton.getInstance().getToplamAnaliz();
+                String analiz = "{ \"toplamAnaliz\" : "+toplamAnaliz+" }";
+                out.write(analiz);
         } finally {            
             out.close();
         }

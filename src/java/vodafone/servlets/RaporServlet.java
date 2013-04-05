@@ -123,7 +123,7 @@ public class RaporServlet extends HttpServlet {
                 sos.println("");
             }
                
-               
+               Singleton.getInstance().incementToplamAnaliz();
         } catch(Exception ex) {
                 response.setContentType("text/html");
                sos.println(ex.toString());

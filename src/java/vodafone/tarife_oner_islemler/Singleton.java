@@ -17,7 +17,7 @@ public class Singleton {
     private         ArrayList<TarifePojo>   tarifeler    = new ArrayList<TarifePojo>();
      private         ArrayList<SMS>   mesaj_paketleri    = new ArrayList<SMS>();
     private  static String                  contextPath  = "" ;
-    
+    private static  Integer          toplamAnaliz = 0 ;
     private Singleton(){           
          
     }
@@ -54,7 +54,20 @@ public class Singleton {
     public  String getContextPath() {
         return contextPath;
     }
+    public void incementToplamAnaliz(){
+        toplamAnaliz ++;
+    }
 
+    public  Integer getToplamAnaliz() {
+        return toplamAnaliz;
+    }
+
+    public  void setToplamAnaliz(Integer toplamAnaliz) {
+        Singleton.toplamAnaliz = toplamAnaliz;
+    }
+    
+    
+    
     public  void setContextPath(String contextPath) {
         Singleton.contextPath = contextPath;
         TarifeOku oku = new TarifeOku();
